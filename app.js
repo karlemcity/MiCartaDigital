@@ -1,27 +1,7 @@
-const $=s=>document.querySelector(s);
-const auth=$("#authDialog"), login=$("#loginDialog"), letterDlg=$("#letterDialog");
-function openRegister(){auth.showModal()} function openLogin(){login.showModal()}
-$("#registerBtn").onclick=openRegister; $("#startBtn").onclick=openRegister; $("#membershipBtn").onclick=openRegister;
-$("#loginBtn").onclick=openLogin; $("#closeDialog").onclick=()=>auth.close(); $("#closeLogin").onclick=()=>login.close(); $("#closeLetter").onclick=()=>letterDlg.close();
-$("#writeBtn").onclick=()=>document.querySelector("#crear").scrollIntoView({behavior:"smooth"});
-$("#registerForm").addEventListener("submit",async e=>{
- e.preventDefault();
- const user={name:$("#fullName").value.trim(),email:$("#email").value.trim()};
- sessionStorage.setItem("mcd_pending_user",JSON.stringify(user));
- // The secure production version should send these fields to your backend,
- // create the Stripe Checkout Session, and return its URL.
- const api = localStorage.getItem("MCD_API_URL");
- if(api){
-   try{
-    const r=await fetch(api+"/create-checkout",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({name:user.name,email:user.email})});
-    const data=await r.json(); if(data.url){location.href=data.url;return;}
-   }catch(err){console.warn(err)}
- }
- alert("La cuenta está preparada. Para activar el pago real hay que conectar el backend de Stripe. Te dejo todo preparado en la carpeta /server del ZIP.");
- auth.close();
-});
-$("#loginForm").addEventListener("submit",e=>{e.preventDefault();location.href="dashboard.html"});
-const quotes=["“A veces lo que más necesitamos es que alguien nos recuerde que no estamos solos.”","“Una palabra bonita puede convertirse en luz para alguien que está teniendo un día difícil.”","“No guardes para mañana ese mensaje que hoy podría alegrarle el corazón a alguien.”","“Tus palabras tienen un valor que quizá todavía no alcanzas a imaginar.”"];
-let qi=0; $("#nextQuote").onclick=()=>{$("#dailyQuote").textContent=quotes[++qi%quotes.length]};
-$("#previewLetter").onclick=()=>{ $("#previewTo").textContent="Para: "+($("#letterTo").value||"Alguien especial"); $("#previewMood").textContent=$("#letterMood").value; $("#previewBody").textContent=$("#letterText").value||"Escribe aquí las palabras que llevas en el corazón."; letterDlg.showModal(); };
-document.querySelector(".menu-btn").onclick=()=>{document.querySelector(".nav").classList.toggle("mobile-open")};
+const modal=document.getElementById("modal"), loginPanel=document.getElementById("loginPanel"), registerPanel=document.getElementById("registerPanel");
+document.querySelectorAll("[data-modal]").forEach(b=>b.addEventListener("click",()=>{modal.classList.add("show");modal.setAttribute("aria-hidden","false");const type=b.dataset.modal;loginPanel.style.display=type==="login"?"block":"none";registerPanel.style.display=type==="register"?"block":"none"}));
+document.querySelector("[data-close]").addEventListener("click",()=>modal.classList.remove("show"));modal.addEventListener("click",e=>{if(e.target===modal)modal.classList.remove("show")});
+document.getElementById("registerForm").addEventListener("submit",e=>{e.preventDefault();const name=document.getElementById("regName").value.trim(),email=document.getElementById("regEmail").value.trim();localStorage.setItem("mcd_user",JSON.stringify({name,email}));alert(`¡Gracias, ${name}! 💗\\n\\nEl siguiente paso es completar el pago de $20/mes. En producción, después del pago el servidor activará tu cuenta y enviará automáticamente el email de bienvenida.`);location.href="dashboard.html"});
+document.getElementById("loginForm").addEventListener("submit",e=>{e.preventDefault();location.href="dashboard.html"});
+let audioCtx,osc,gain,on=false;document.getElementById("musicBtn").addEventListener("click",()=>{if(!audioCtx){audioCtx=new (window.AudioContext||window.webkitAudioContext)();gain=audioCtx.createGain();gain.gain.value=.018;gain.connect(audioCtx.destination);osc=audioCtx.createOscillator();osc.type="sine";osc.frequency.value=220;osc.connect(gain);osc.start();}if(on){gain.gain.value=.018;document.getElementById("musicBtn").innerHTML="♫ <span>Música</span>"}else{gain.gain.value=.035;document.getElementById("musicBtn").innerHTML="♫ <span>Suave ON</span>"}on=!on});
+document.querySelectorAll("nav a").forEach(a=>a.addEventListener("click",()=>document.querySelectorAll("nav a").forEach(x=>x.classList.remove("active"))));

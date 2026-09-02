@@ -1,3 +1,9 @@
-const pending=JSON.parse(sessionStorage.getItem("mcd_pending_user")||"null");
-if(pending) document.querySelector("#userName").textContent=pending.name.split(" ")[0];
-document.querySelector("#logout").onclick=()=>{sessionStorage.clear();location.href="index.html"};
+const user=JSON.parse(localStorage.getItem("mcd_user")||'{"name":"Corazón","email":"tu@email.com"}');
+const name=user.name||"Corazón";document.getElementById("profileName").textContent=name;document.getElementById("welcomeName").textContent=name;document.getElementById("accountName").textContent=name;document.getElementById("accountEmail").textContent=user.email||"tu@email.com";
+const avatar=document.getElementById("avatar"),big=document.getElementById("bigAvatar"),saved=localStorage.getItem("mcd_avatar");if(saved){avatar.innerHTML=`<img src="${saved}">`;big.innerHTML=`<img src="${saved}">`}
+document.getElementById("changeAvatar").onclick=()=>document.getElementById("photoInput").click();document.getElementById("uploadPhoto").onclick=()=>document.getElementById("photoInput").click();
+document.getElementById("photoInput").addEventListener("change",e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{localStorage.setItem("mcd_avatar",r.result);avatar.innerHTML=`<img src="${r.result}">`;big.innerHTML=`<img src="${r.result}">`};r.readAsDataURL(f)});
+document.querySelectorAll(".sticker-picker button").forEach(b=>b.addEventListener("click",()=>{document.getElementById("letterText").value+=" "+b.textContent}));
+document.getElementById("saveDraft").onclick=()=>alert("Borrador guardado en este dispositivo 💗");document.getElementById("sendLetter").onclick=()=>{if(!document.getElementById("letterText").value.trim())return alert("Escribe tu carta primero 💌");alert("Tu carta quedó preparada para envío 💕. En producción será revisada antes de enviarse.")};
+document.getElementById("logout").onclick=()=>{localStorage.removeItem("mcd_user");location.href="index.html"};
+document.querySelectorAll("[data-scroll]").forEach(b=>b.onclick=()=>document.querySelector(b.dataset.scroll).scrollIntoView({behavior:"smooth"}));
