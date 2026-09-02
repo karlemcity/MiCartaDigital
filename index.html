@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Mi Carta Digital — palabras que llegan al corazón.">
+  <title>Mi Carta Digital 💌</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="header">
+  <a class="logo" href="#inicio" aria-label="Mi Carta Digital">
+    <span class="logo-mark">♡</span>
+    <span><b>Mi Carta Digital</b><small>PALABRAS QUE LLEGAN AL CORAZÓN</small></span>
+  </a>
+  <nav class="nav">
+    <a href="#inicio">Inicio</a><a href="#cartas">Cartas</a><a href="#grupos">Grupos</a>
+    <a href="#reflexiones">Reflexiones</a><a href="#nosotros">Sobre nosotros</a>
+  </nav>
+  <div class="header-actions"><a class="btn btn-light" href="#login">Iniciar sesión</a><a class="btn" href="#registro">♡ Regístrate</a></div>
+</header>
+
+<main>
+<section id="inicio" class="hero section">
+  <div class="hero-copy">
+    <span class="eyebrow">BIENVENIDO A MI CARTA DIGITAL ♡</span>
+    <h1>Una carta puede<br><em>cambiar un día entero.</em></h1>
+    <div class="script">Escribe. Conecta. Inspira. ♡</div>
+    <p>Comparte palabras que llegan al corazón y sé parte de una comunidad que escucha, entiende y acompaña.</p>
+    <div class="hero-buttons"><a class="btn btn-big" href="#registro">♡ Únete ahora por $20/mes</a><a class="btn btn-light btn-big" href="#nosotros">Conoce cómo funciona →</a></div>
+    <div class="trust"><span>♢ Seguro y privado</span><span>♧ Grupos de 10 personas</span><span>♧ Regalo de bienvenida</span></div>
+  </div>
+  <div class="hero-art">
+    <div class="flower flower-a">✿</div><div class="flower flower-b">✿</div>
+    <div class="envelope"><div class="letter"><span>♡</span><h3>Tú puedes ser<br>la razón.</h3><small>Con cariño,<br>Mi Carta Digital</small></div></div>
+    <div class="pen">✎</div><div class="floating-heart">♥</div>
+  </div>
+</section>
+
+<section class="feature-row">
+  <article><i>✎</i><div><h3>Escribe cartas</h3><p>Expresa lo que sientes y brinda apoyo.</p></div></article>
+  <article><i>♣</i><div><h3>Conecta</h3><p>Recibe cartas de personas que te entienden.</p></div></article>
+  <article><i>♡</i><div><h3>Inspira</h3><p>Tus palabras pueden cambiar un día.</p></div></article>
+  <article><i>♢</i><div><h3>Seguro</h3><p>Cartas revisadas con amor y respeto.</p></div></article>
+  <article><i>♧</i><div><h3>Detalles</h3><p>Momentos especiales en cada entrega.</p></div></article>
+</section>
+
+<section id="cartas" class="section dashboard">
+  <div class="section-title"><span class="eyebrow">TU ESPACIO</span><h2>Tus cartas, tu espacio ♡</h2><p>Escribe una carta, revisa las que enviaste y abre tu buzón.</p></div>
+  <div class="cards-3">
+    <article class="action-card pink"><span class="icon">✉</span><h3>Crear carta</h3><p>Escribe y envía palabras que llegan.</p><a href="#crear">Comenzar →</a></article>
+    <article class="action-card purple"><span class="icon">➤</span><h3>Enviadas</h3><p>Revisa las cartas que has enviado.</p><a href="#enviadas">Ver mis cartas →</a></article>
+    <article class="action-card peach"><span class="icon">♡</span><h3>Recibidas</h3><p>Descubre cartas que te han enviado.</p><a href="#recibidas">Abrir buzón →</a></article>
+  </div>
+</section>
+
+<section id="reflexiones" class="section reflection-layout">
+  <div class="reflection"><span class="eyebrow">REFLEXIÓN DEL DÍA ♡</span><blockquote>“A veces lo que más necesitamos es que alguien nos recuerde que no estamos solos.”</blockquote><a class="btn" href="#reflexiones-lista">Ver todas las reflexiones →</a></div>
+  <div id="reflexiones-lista" class="reflection-list">
+    <article><span>♡</span><p>“No subestimes el poder de tus palabras. Pueden sanar lo que no ves.”</p></article>
+    <article><span>♡</span><p>“Lo que hoy parece difícil, mañana será parte de tu historia de superación.”</p></article>
+    <article><span>♡</span><p>“Sé la razón por la que alguien crea nuevamente en la bondad.”</p></article>
+  </div>
+</section>
+
+<section id="grupos" class="group-banner section">
+  <div class="group-icon">♣</div><div><span class="eyebrow">COMUNIDAD</span><h2>Grupos de 10 personas</h2><p>Cada mes te asignamos un grupo donde todos pueden compartir y recibir apoyo.</p></div>
+  <a class="btn btn-light" href="#registro">Conoce más sobre los grupos →</a>
+</section>
+
+<section id="crear" class="section form-section">
+  <div class="section-title"><span class="eyebrow">ESCRIBE DESDE EL CORAZÓN</span><h2>Crear una carta 💌</h2></div>
+  <form id="letterForm" class="form-card">
+    <div class="form-grid"><label>Tipo de carta<select><option>Ánimo 🌷</option><option>Amistad 🤍</option><option>Agradecimiento ✨</option><option>Amor ❤️</option><option>Desahogo 💭</option></select></label>
+    <label>Para<input required placeholder="Persona asignada o grupo"></label></div>
+    <label>Título<input required placeholder="Un título para tu carta"></label>
+    <label>Mensaje<textarea required placeholder="Escribe aquí tus palabras..."></textarea></label>
+    <label>Firma<input placeholder="Con cariño, ..."></label>
+    <button class="btn btn-big" type="submit">Enviar para revisión 💌</button>
+    <p id="letterMessage" class="form-message"></p>
+  </form>
+</section>
+
+<section id="enviadas" class="section simple-section"><div class="section-title"><span class="eyebrow">MIS CARTAS</span><h2>Cartas enviadas 📤</h2></div><div class="list-card"><div><b>Para: Grupo #1</b><span>“Espero que hoy tengas un día bonito...”</span></div><strong>En revisión</strong></div></section>
+<section id="recibidas" class="section simple-section"><div class="section-title"><span class="eyebrow">MI BUZÓN</span><h2>Cartas recibidas 📥</h2></div><div class="list-card"><div><b>Una carta para ti</b><span>Alguien quiso dedicarte unas palabras.</span></div><button class="btn" id="openLetter">Abrir carta</button></div></section>
+
+<section id="registro" class="section form-section"><div class="section-title"><span class="eyebrow">ÚNETE</span><h2>Comienza tu historia 💗</h2><p>Membresía <b>$20 al mes</b></p></div><form id="registerForm" class="form-card narrow"><input required placeholder="Nombre"><input required type="email" placeholder="Correo electrónico"><input required type="password" minlength="8" placeholder="Contraseña"><label class="check"><input type="checkbox" required> Acepto los términos y condiciones.</label><button class="btn btn-big" type="submit">Crear mi cuenta ♡</button><p id="registerMessage" class="form-message"></p></form></section>
+
+<section id="login" class="section form-section"><div class="section-title"><span class="eyebrow">BIENVENIDA</span><h2>Inicia sesión 💗</h2></div><form id="loginForm" class="form-card narrow"><input required type="email" placeholder="Correo electrónico"><input required type="password" placeholder="Contraseña"><button class="btn btn-big" type="submit">Entrar</button><p id="loginMessage" class="form-message"></p></form></section>
+
+<section id="nosotros" class="section about"><span class="eyebrow">SOBRE NOSOTROS</span><h2>Conectar corazones, una carta a la vez.</h2><p>Mi Carta Digital es un espacio para expresar cariño, ánimo, gratitud y esperanza a través de cartas digitales.</p><div class="quote">“Nunca sabes cuánto puede significar una carta para alguien.” ♡</div></section>
+</main>
+
+<div id="modal" class="modal"><div class="modal-card"><button id="closeModal" class="close">×</button><span class="eyebrow">UNA CARTA PARA TI</span><h2>♡ Con cariño</h2><p>“Espero que recuerdes hoy que eres importante, que tus sentimientos importan y que siempre puede existir un nuevo comienzo.”</p><small>— Alguien de Mi Carta Digital</small></div></div>
+<footer><b>♡ Mi Carta Digital</b><p>Una carta puede cambiar un día entero.</p><small>© 2026 Mi Carta Digital · Hecho con amor</small></footer>
+<script src="app.js"></script>
+</body>
+</html>
