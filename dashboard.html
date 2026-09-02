@@ -1,55 +1,89 @@
 <!doctype html>
 <html lang="es">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Mi Carta Digital — Mi espacio</title><link rel="stylesheet" href="styles.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mi Carta Digital — Mi espacio 💌</title>
+<link rel="stylesheet" href="dashboard.css">
 </head>
-<body class="dashboard-page">
-<div class="sparkle-field"></div>
-<aside class="sidebar glass">
-  <a class="brand" href="index.html">💌 <span>Mi Carta <b>Digital</b></span></a>
-  <div class="profile">
-    <div class="avatar" id="avatar">💗</div>
-    <div><strong id="profileName">Tu nombre</strong><small>👑 Miembro Premium</small></div>
-  </div>
-  <nav class="side-nav">
-    <a class="active" href="#inicio">⌂ <span>Inicio</span></a>
-    <a href="#buzon">✉ <span>Mi Buzón</span><em>5</em></a>
-    <a href="#crear">✎ <span>Crear Carta</span></a>
-    <a href="#reflexiones">✦ <span>Reflexiones</span></a>
-    <a href="#grupos">♧ <span>Grupos</span><em>3</em></a>
-    <a href="#membresia">♛ <span>Membresía</span></a>
-    <a href="#cuenta">♙ <span>Cuenta</span></a>
-    <button id="logout">↪ <span>Salir</span></button>
+<body>
+<div class="aurora"></div><div id="particles"></div>
+
+<aside class="sidebar">
+  <a class="brand" href="index.html">💌 <b>Mi Carta</b><span>Digital</span></a>
+  <div class="profile-mini"><div class="avatar" id="miniAvatar">💗</div><div><b id="miniName">Mi corazón</b><small>Mi espacio</small></div></div>
+  <nav>
+    <a class="active" href="#inicio">🏠 <span>Inicio</span></a>
+    <a href="#buzon">📬 <span>Mi Buzón</span></a>
+    <a href="#crear">✍️ <span>Crear Carta</span></a>
+    <a href="#reflexiones">✨ <span>Reflexiones</span></a>
+    <a href="#grupos">👥 <span>Grupos</span></a>
+    <a href="#membresia">👑 <span>Membresía</span></a>
+    <a href="#cuenta">👤 <span>Mi Perfil</span></a>
   </nav>
+  <button class="logout" onclick="logout()">🚪 Salir</button>
+  <a class="admin" href="#admin" onclick="showAdmin()">👑 Panel administrativo</a>
 </aside>
 
-<main class="dash-main">
-<header class="dash-top"><div><div class="eyebrow">TU ESPACIO, TU HISTORIA 💕</div><h1>¡Bienvenid@ de nuevo, <span id="welcomeName">corazón</span>! ✨</h1></div><button class="btn btn-pink" id="changeAvatar">📷 Cambiar foto/avatar</button></header>
+<main class="main">
+<header class="top">
+  <div><span class="eyebrow">MI ESPACIO · CARTA DIGITAL</span><h1>Bienvenida, <span id="welcomeName">corazón</span> 💗</h1></div>
+  <button class="soft" onclick="toggleTheme()">✨ Cambiar ambiente</button>
+</header>
 
-<section id="inicio" class="dash-grid">
-  <article class="dash-card hero-dash"><span class="badge">👑 PREMIUM</span><h2>Tu buzón está lleno de cariño 💌</h2><p>Hoy puedes escribir una carta, elegir un sticker y dejarle una palabra bonita a alguien.</p><button class="btn btn-pink" data-scroll="#crear">Escribir una carta ✨</button></article>
-  <article class="dash-card"><div class="dash-icon">💌</div><h3>Mi Buzón</h3><p><b>5</b> cartas esperan por ti.</p><a href="#buzon">Ver cartas →</a></article>
-  <article class="dash-card"><div class="dash-icon">📝</div><h3>Crear Carta</h3><p>Escribe algo que alguien necesite leer.</p><a href="#crear">Comenzar →</a></article>
-  <article class="dash-card"><div class="dash-icon">✨</div><h3>Reflexión del día</h3><p>“A veces lo que más necesitamos es que alguien nos recuerde que no estamos solos.”</p><a href="#reflexiones">Leer más →</a></article>
+<section id="inicio" class="hero-card">
+  <div><div class="badge">✨ REFLEXIÓN DE HOY</div>
+  <h2>Siempre sé tú,<br><em>sin importar los demás.</em></h2>
+  <p>No cambies tu esencia para encajar. Hay algo hermoso en seguir siendo tú, incluso cuando el mundo intenta decirte quién debes ser.</p>
+  <button class="pink-btn" onclick="document.getElementById('crear').scrollIntoView({behavior:'smooth'})">Escribir una carta 💌</button></div>
+  <div class="floating-heart">💗</div>
 </section>
 
-<section id="buzon" class="dash-section"><div class="section-heading left"><div class="eyebrow">MI BUZÓN 💌</div><h2>Tus cartas</h2></div><div class="letter-list">
-<div class="received">💌 <div><b>Para ti, corazón</b><small>Gracias por existir y por tus palabras 💗</small></div><span>Hoy</span></div>
-<div class="received">💌 <div><b>Una palabra para ti</b><small>Espero que hoy encuentres un motivo para sonreír.</small></div><span>Ayer</span></div>
-<div class="received">💌 <div><b>No estás sol@</b><small>Tu historia importa más de lo que imaginas.</small></div><span>2 días</span></div>
-</div></section>
+<section id="buzon" class="section">
+ <div class="heading"><div><span class="eyebrow">📬 MI BUZÓN</span><h2>Tus cartas</h2></div><span class="count">0 nuevas</span></div>
+ <div class="cards"><article class="letter-card unread"><span class="card-icon">💌</span><div><b>Tu buzón te espera</b><p>Cuando recibas una carta, aparecerá aquí con una animación especial.</p></div><span>✨</span></article>
+ <article class="letter-card"><span class="card-icon">🌷</span><div><b>Un espacio para guardar</b><p>Conserva tus mensajes importantes y vuelve a ellos cuando quieras.</p></div><span>♡</span></article></div>
+</section>
 
-<section id="crear" class="dash-section compose"><div class="section-heading left"><div class="eyebrow">CREA ALGO BONITO ✍️</div><h2>Escribe tu carta</h2></div>
-<div class="composer glass"><input id="recipient" placeholder="¿Para quién es?"><input id="subject" placeholder="Título de tu carta"><textarea id="letterText" rows="8" placeholder="Escribe desde el corazón..."></textarea><div class="sticker-picker"><b>Stickers digitales:</b><button>💗</button><button>⭐</button><button>🦋</button><button>🌸</button><button>💌</button><button>🌙</button><button>✨</button><button>🧸</button></div><div class="composer-actions"><button class="btn btn-ghost" id="saveDraft">Guardar borrador</button><button class="btn btn-pink" id="sendLetter">Enviar carta 💌</button></div></div></section>
+<section id="crear" class="section">
+ <div class="heading"><div><span class="eyebrow">✍️ CREAR CARTA</span><h2>Escribe desde el corazón</h2></div></div>
+ <div class="composer">
+  <div class="preview-envelope"><div class="seal">❤</div><div class="paper"><small>Para alguien especial</small><b id="previewTitle">Una carta para ti</b><span id="previewText">Tus palabras pueden iluminar un día.</span></div></div>
+  <div class="form"><label>Para <input id="recipient" placeholder="Nombre del destinatario" oninput="preview()"></label>
+  <label>Tu mensaje <textarea id="message" rows="7" placeholder="Escribe aquí lo que tu corazón quiere decir..." oninput="preview()"></textarea>
+  <div class="decor-row"><button onclick="addEmoji('💗')">💗</button><button onclick="addEmoji('🌸')">🌸</button><button onclick="addEmoji('🦋')">🦋</button><button onclick="addEmoji('✨')">✨</button><button onclick="addEmoji('🌷')">🌷</button></div>
+  <button class="pink-btn" onclick="submitLetter()">Enviar a revisión 💌</button>
+  <small class="notice">🛡️ Por seguridad, las cartas pasan primero por revisión del administrador.</small></div>
+ </div>
+</section>
 
-<section id="reflexiones" class="dash-section"><div class="section-heading left"><div class="eyebrow">REFLEXIONES ✨</div><h2>Palabras para el alma</h2></div><div class="quote-card">“No tienes que tener todas las respuestas. Solo sigue escribiendo tu historia.”<span>♡ Mi Carta Digital</span></div></section>
+<section id="reflexiones" class="section">
+ <div class="heading"><div><span class="eyebrow">✨ REFLEXIONES</span><h2>Palabras para el alma</h2></div></div>
+ <div class="reflection-grid"><article><span>🌷</span><h3>Tu valor</h3><p>No necesitas demostrarle a nadie que eres suficiente. Ya lo eres.</p></article><article><span>🦋</span><h3>Nuevos comienzos</h3><p>A veces cerrar una puerta es la manera más bonita de abrir otra.</p></article><article><span>⭐</span><h3>Un día a la vez</h3><p>No tienes que tener todas las respuestas hoy. Respira y continúa.</p></article></div>
+</section>
 
-<section id="grupos" class="dash-section"><div class="section-heading left"><div class="eyebrow">COMUNIDAD ♡</div><h2>Grupos</h2></div><div class="community-grid"><div>🌷 <b>Palabras de esperanza</b><small>Personas compartiendo apoyo</small></div><div>💗 <b>Cartas de amistad</b><small>Conecta desde el corazón</small></div><div>✨ <b>Reflexiones</b><small>Un lugar para inspirarte</small></div></div></section>
+<section id="grupos" class="section">
+ <div class="heading"><div><span class="eyebrow">👥 COMUNIDAD</span><h2>Grupos</h2></div></div>
+ <div class="group-card"><div class="group-icon">💞</div><div><h3>Palabras de esperanza</h3><p>Personas que creen que una carta puede cambiar un momento.</p><span>10 miembros · Comunidad inicial</span></div><button class="soft">Ver grupo</button></div>
+</section>
 
-<section id="membresia" class="dash-section"><div class="section-heading left"><div class="eyebrow">MI MEMBRESÍA 👑</div><h2>Premium · $20/mes</h2></div><div class="membership-status glass"><span>🟢</span><div><b>Membresía activa</b><small>Tu espacio premium está disponible.</small></div><strong>Renovación mensual</strong></div></section>
+<section id="membresia" class="section">
+ <div class="membership"><div><span class="eyebrow">👑 MEMBRESÍA</span><h2>Carta Digital <em>Premium</em></h2><p>Tu espacio para conectar, escribir y recibir momentos especiales.</p><div class="benefits"><span>💌 Cartas</span><span>✨ Diseños premium</span><span>🦋 Stickers</span><span>👥 Grupos</span><span>🌷 Reflexiones</span></div></div><div class="price"><b>$20</b><small>/ mes</small><button class="pink-btn" onclick="toast('La membresía quedará conectada al sistema de pago cuando actives tu backend. 👑')">Quiero ser miembro</button></div></div>
+</section>
 
-<section id="cuenta" class="dash-section"><div class="section-heading left"><div class="eyebrow">MI PERFIL ♡</div><h2>Tu cuenta</h2></div><div class="account-card glass"><div class="big-avatar" id="bigAvatar">💗</div><div><h3 id="accountName">Tu nombre</h3><p id="accountEmail">tu@email.com</p><button class="btn btn-outline" id="uploadPhoto">Subir imagen / avatar</button><input id="photoInput" type="file" accept="image/*" hidden></div></div></section>
+<section id="cuenta" class="section">
+ <div class="heading"><div><span class="eyebrow">👤 MI PERFIL</span><h2>Tu cuenta</h2></div></div>
+ <div class="account"><div class="big-avatar" id="bigAvatar">💗</div><div><h3 id="profileName">Mi corazón</h3><p id="profileEmail">correo@ejemplo.com</p><span class="status">● Cuenta demo</span></div><button class="soft" onclick="editProfile()">Editar perfil</button></div>
+</section>
+
+<section id="admin" class="section admin-panel">
+ <div class="heading"><div><span class="eyebrow">👑 ADMINISTRACIÓN</span><h2>Panel administrativo</h2></div><span class="secure">🔒 Privado</span></div>
+ <div class="stats"><div><b id="users">0</b><span>👥 Usuarios</span></div><div><b>0</b><span>💌 Pendientes</span></div><div><b>3</b><span>⭐ Reviews</span></div><div><b>0</b><span>👑 Membresías</span></div></div>
+ <div class="admin-tools"><div><b>💌 Moderación</b><p>Revisa y aprueba las cartas antes de enviarlas.</p></div><div><b>✨ Reflexiones</b><p>Crea y programa la reflexión del día.</p></div><div><b>👥 Grupos</b><p>Administra los grupos y sus miembros.</p></div><div><b>📧 Emails</b><p>Configura la bienvenida automática para nuevos registros.</p></div></div>
+</section>
+
+<footer>💌 Carta Digital · Palabras que conectan corazones · <a href="index.html">Volver a portada</a></footer>
 </main>
+<div id="toast"></div>
 <script src="dashboard.js"></script>
 </body></html>

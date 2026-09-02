@@ -1,9 +1,20 @@
-const user=JSON.parse(localStorage.getItem("mcd_user")||'{"name":"Corazón","email":"tu@email.com"}');
-const name=user.name||"Corazón";document.getElementById("profileName").textContent=name;document.getElementById("welcomeName").textContent=name;document.getElementById("accountName").textContent=name;document.getElementById("accountEmail").textContent=user.email||"tu@email.com";
-const avatar=document.getElementById("avatar"),big=document.getElementById("bigAvatar"),saved=localStorage.getItem("mcd_avatar");if(saved){avatar.innerHTML=`<img src="${saved}">`;big.innerHTML=`<img src="${saved}">`}
-document.getElementById("changeAvatar").onclick=()=>document.getElementById("photoInput").click();document.getElementById("uploadPhoto").onclick=()=>document.getElementById("photoInput").click();
-document.getElementById("photoInput").addEventListener("change",e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{localStorage.setItem("mcd_avatar",r.result);avatar.innerHTML=`<img src="${r.result}">`;big.innerHTML=`<img src="${r.result}">`};r.readAsDataURL(f)});
-document.querySelectorAll(".sticker-picker button").forEach(b=>b.addEventListener("click",()=>{document.getElementById("letterText").value+=" "+b.textContent}));
-document.getElementById("saveDraft").onclick=()=>alert("Borrador guardado en este dispositivo 💗");document.getElementById("sendLetter").onclick=()=>{if(!document.getElementById("letterText").value.trim())return alert("Escribe tu carta primero 💌");alert("Tu carta quedó preparada para envío 💕. En producción será revisada antes de enviarse.")};
-document.getElementById("logout").onclick=()=>{localStorage.removeItem("mcd_user");location.href="index.html"};
-document.querySelectorAll("[data-scroll]").forEach(b=>b.onclick=()=>document.querySelector(b.dataset.scroll).scrollIntoView({behavior:"smooth"}));
+const toastEl=document.getElementById('toast');
+function getUser(){try{return JSON.parse(localStorage.getItem('cd_user')||'null')}catch(e){return null}}
+const user=getUser();
+if(user){
+ document.getElementById('welcomeName').textContent=user.name;
+ document.getElementById('miniName').textContent=user.name;
+ document.getElementById('profileName').textContent=user.name;
+ document.getElementById('profileEmail').textContent=user.email;
+}
+document.getElementById('users').textContent=user?'1':'0';
+function toast(msg){toastEl.textContent=msg;toastEl.classList.add('show');setTimeout(()=>toastEl.classList.remove('show'),3200)}
+function logout(){localStorage.removeItem('cd_user');toast('Has salido de tu espacio. 💌');setTimeout(()=>location.href='index.html',900)}
+function preview(){const r=document.getElementById('recipient').value.trim();const m=document.getElementById('message').value.trim();document.getElementById('previewTitle').textContent=r?`Una carta para ${r}`:'Una carta para ti';document.getElementById('previewText').textContent=m||'Tus palabras pueden iluminar un día.'}
+function addEmoji(e){const t=document.getElementById('message');t.value+=(t.value?' ':'')+e;preview();t.focus()}
+function submitLetter(){const r=document.getElementById('recipient').value.trim(),m=document.getElementById('message').value.trim();if(!r||!m){toast('Completa el destinatario y el mensaje primero. 💗');return}toast('💌 Tu carta quedó enviada a revisión. ¡Gracias por compartir tus palabras!');document.getElementById('message').value='';preview()}
+function showAdmin(){setTimeout(()=>document.getElementById('admin').scrollIntoView({behavior:'smooth'}),50)}
+function editProfile(){toast('Aquí conectaremos tu editor de perfil y avatar. 👤')}
+function toggleTheme(){document.body.classList.toggle('dream');toast('✨ Ambiente cambiado');}
+window.addEventListener('scroll',()=>{document.querySelectorAll('.sidebar nav a').forEach(a=>{const id=a.getAttribute('href');if(id&&id.startsWith('#')){const el=document.querySelector(id);if(el){const r=el.getBoundingClientRect();a.classList.toggle('active',r.top<180&&r.bottom>180)}}})}) 
+const p=document.getElementById('particles');['💗','✦','✧','🦋','🌸','✨'].forEach(s=>{for(let i=0;i<5;i++){let x=document.createElement('span');x.textContent=s;x.style.position='fixed';x.style.left=Math.random()*100+'vw';x.style.bottom='-30px';x.style.opacity='.35';x.style.fontSize=10+Math.random()*18+'px';x.style.animation=`rise ${12+Math.random()*14}s linear ${-Math.random()*15}s infinite`;p.appendChild(x)}});const st=document.createElement('style');st.textContent='@keyframes rise{to{transform:translateY(-115vh) rotate(360deg);opacity:0}}';document.head.appendChild(st);
