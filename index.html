@@ -1,126 +1,86 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Mi Carta Digital 💌</title>
-<meta name="description" content="Mi Carta Digital — palabras que llegan al corazón.">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Carta Digital 💌</title>
 <link rel="stylesheet" href="styles.css">
 </head>
-<body class="landing">
-<div class="sparkle-field" aria-hidden="true"></div>
+<body>
+<div class="ambient"><span></span><span></span><span></span><span></span><span></span></div>
+<div class="particles" id="particles"></div>
 
-<header class="site-header glass">
-  <a class="brand" href="index.html"><span class="brand-icon">💌</span><span>Mi Carta <b>Digital</b></span><i>✦</i></a>
+<header class="topbar">
+  <div class="brand">💌 <span>Carta Digital</span></div>
   <nav>
-    <a class="active" href="#inicio">Inicio</a>
-    <a href="#como">Cómo funciona</a>
-    <a href="#mision">Misión y visión</a>
-    <a href="#membresia">Membresía</a>
-    <a href="#reviews">Reviews</a>
+    <a href="#inicio">Inicio</a><a href="#mision">Misión</a><a href="#vision">Visión</a><a href="#reviews">Reviews</a>
+    <button class="ghost" onclick="openModal('login')">Entrar</button>
+    <button class="primary" onclick="openModal('register')">Registrarme ✨</button>
   </nav>
-  <div class="header-actions">
-    <button class="btn btn-ghost" data-modal="login">Iniciar sesión</button>
-    <button class="btn btn-pink" data-modal="register">Registrarme ✨</button>
-  </div>
 </header>
 
 <main id="inicio">
-<section class="hero section">
+<section class="hero">
   <div class="hero-copy">
-    <div class="eyebrow">PALABRAS QUE LLEGAN AL CORAZÓN ✨</div>
-    <h1>Mi Carta<br><span>Digital</span> ♡</h1>
-    <h2>Escribe. Conecta. Inspira. 💌</h2>
-    <p>Un espacio especial para enviar palabras de amor, apoyo, amistad y esperanza. Porque una carta puede cambiar el día de alguien.</p>
-    <div class="hero-actions">
-      <button class="btn btn-pink btn-lg" data-modal="register">✨ Comenzar Ahora</button>
-      <a class="btn btn-outline btn-lg" href="#como">▷ Conoce más</a>
+    <div class="eyebrow">PALABRAS QUE CONECTAN CORAZONES</div>
+    <h1>Siempre sé tú,<br><em>sin importar los demás.</em> ✨</h1>
+    <p class="lead">Una carta puede llegar donde muchas palabras no llegan. Descubre un espacio para escribir, recibir, acompañar y regalar esperanza.</p>
+    <div class="actions"><button class="primary big" onclick="openModal('register')">Crear mi cuenta 💌</button><button class="glass big" onclick="scrollToSection('daily')">Reflexión del día ↓</button></div>
+    <div class="trust"><span>✦ Comunidad con propósito</span><span>✦ Cartas revisadas</span><span>✦ Diseño premium</span></div>
+  </div>
+  <div class="envelope-stage">
+    <div class="sparkle s1">✦</div><div class="sparkle s2">✧</div><div class="sparkle s3">✦</div>
+    <div class="envelope" onclick="openLetter()">
+      <div class="envelope-flap"></div><div class="seal">❤</div>
+      <div class="letter"><span>Para alguien especial</span><strong>Hay palabras que llegan justo cuando el corazón las necesita.</strong><small>Con cariño, Carta Digital 💌</small></div>
     </div>
-    <div class="mini-points"><span>♡ Cartas con propósito</span><span>✦ Comunidad</span><span>🔒 Espacio cuidado</span></div>
-  </div>
-  <div class="hero-art">
-    <div class="orbit orbit-a"></div><div class="orbit orbit-b"></div>
-    <div class="floating-sticker sticker-star">⭐</div>
-    <div class="floating-sticker sticker-butterfly">🦋</div>
-    <div class="floating-sticker sticker-heart">💗</div>
-    <div class="floating-sticker sticker-note">📝</div>
-    <div class="envelope-wrap">
-      <div class="letter-card">
-        <div class="stamp">💗</div>
-        <h3>Hola, corazón bonito ♡</h3>
-        <p>Hoy es un buen día para recordar que tu historia importa y que tus palabras pueden cambiar el mundo.</p>
-        <strong>Con cariño,<br>Mi Carta Digital 💕</strong>
-      </div>
-      <div class="envelope">
-        <div class="flap"></div><div class="pocket"></div><div class="seal">♥</div>
-      </div>
-    </div>
+    <div class="hint">Toca el sobre para abrirlo ✨</div>
   </div>
 </section>
 
-<section id="como" class="feature-strip section">
-  <div class="feature"><span>💌</span><h3>Escribe</h3><p>Cartas únicas</p></div>
-  <div class="feature"><span>💖</span><h3>Conecta</h3><p>Personas reales</p></div>
-  <div class="feature"><span>✨</span><h3>Inspira</h3><p>Palabras que ayudan</p></div>
-  <div class="feature"><span>🛡️</span><h3>Seguro</h3><p>Espacio cuidado</p></div>
-  <div class="feature"><span>🎁</span><h3>Detalles</h3><p>Momentos especiales</p></div>
-</section>
-
-<section id="mision" class="split section">
-  <div class="info-card glow">
-    <span class="big-icon">🌷</span><div class="eyebrow">NUESTRA MISIÓN</div>
-    <h2>Que nadie sienta que sus palabras no importan.</h2>
-    <p>Crear un lugar cálido donde las personas puedan escribir, recibir apoyo y regalar un momento de esperanza mediante cartas digitales.</p>
-  </div>
-  <div class="info-card glow">
-    <span class="big-icon">🌟</span><div class="eyebrow">NUESTRA VISIÓN</div>
-    <h2>Convertir una pequeña carta en una gran conexión.</h2>
-    <p>Construir una comunidad positiva donde cada mensaje sea una oportunidad para acompañar, inspirar y dejar una huella bonita.</p>
+<section class="daily section" id="daily">
+  <div class="section-tag">✨ REFLEXIÓN DEL DÍA</div>
+  <div class="quote-card">
+    <div class="quote-mark">“</div>
+    <h2>Siempre sé tú, sin importar los demás.</h2>
+    <p>No cambies tu esencia para encajar en lugares donde nunca valorarán quién eres. Tu forma de sentir, soñar y seguir adelante tiene un valor único. A veces, ser tú mismo es el acto de amor propio más bonito que puedes regalarte.</p>
+    <span>— Carta Digital 🌷</span>
   </div>
 </section>
 
-<section id="membresia" class="membership section">
-  <div class="section-heading"><div class="eyebrow">MEMBRESÍA</div><h2>Un espacio para escribir desde el corazón 💗</h2><p>Acceso especial para miembros.</p></div>
-  <div class="price-card">
-    <div class="crown">👑</div><h3>Mi Carta Digital Premium</h3><div class="price"><span>$</span>20<small>/mes</small></div>
-    <ul><li>✓ Crear y enviar cartas digitales</li><li>✓ Mi Buzón privado</li><li>✓ Stickers digitales exclusivos</li><li>✓ Reflexiones y comunidad</li><li>✓ Perfil con foto o avatar</li><li>✓ Nuevas sorpresas para miembros</li></ul>
-    <button class="btn btn-pink btn-lg" data-modal="register">Quiero mi membresía ✨</button>
-    <small class="secure-note">🔒 El pago real se conecta mediante Stripe en el servidor.</small>
+<section class="features section">
+  <div class="section-tag">💫 UN LUGAR PARA SENTIR</div><h2>Haz que tus palabras <em>dejen huella.</em></h2>
+  <div class="grid">
+    <article><i>💌</i><h3>Crear Carta</h3><p>Escribe mensajes con fondos, flores, stickers, corazones y una firma especial.</p></article>
+    <article><i>📬</i><h3>Mi Buzón</h3><p>Recibe y guarda tus cartas en un espacio íntimo y bonito.</p></article>
+    <article><i>🦋</i><h3>Reflexiones</h3><p>Pequeñas palabras para acompañar grandes momentos.</p></article>
+    <article><i>👥</i><h3>Grupos</h3><p>Conecta con personas dentro de una comunidad organizada y cuidada.</p></article>
+    <article><i>🌸</i><h3>Decoración</h3><p>Flores, mariposas, estrellas y detalles animados para hacer cada carta única.</p></article>
+    <article><i>👑</i><h3>Membresía</h3><p>Acceso premium por $20 al mes con beneficios especiales.</p></article>
   </div>
 </section>
 
-<section id="reviews" class="reviews section">
-  <div class="section-heading"><div class="eyebrow">REVIEWS 💕</div><h2>Lo que dicen de Mi Carta Digital</h2></div>
-  <div class="review-grid">
-    <article class="review"><div>★★★★★</div><p>“Un espacio precioso. A veces una sola carta llega justo cuando más se necesita.”</p><b>— Mariana</b></article>
-    <article class="review"><div>★★★★★</div><p>“Me encanta poder escribir algo bonito y guardar mis cartas. Se siente muy especial.”</p><b>— Laura</b></article>
-    <article class="review"><div>★★★★★</div><p>“La idea de conectar personas por medio de palabras me parece hermosa.”</p><b>— Andrea</b></article>
-  </div>
+<section class="mission section" id="mision">
+  <div class="split"><div class="flower-orb">🌷</div><div><div class="section-tag">🌷 NUESTRA MISIÓN</div><h2>Conectar corazones <em>a través de las palabras.</em></h2><p>En Carta Digital creamos un espacio donde cada mensaje tiene un propósito: acompañar, inspirar, escuchar y regalar un momento de esperanza. Queremos transformar simples palabras en experiencias significativas, creando conexiones que lleven alegría, apoyo y cariño a quienes más lo necesitan.</p></div></div>
 </section>
 
-<section class="cta section">
-  <div><div class="eyebrow">TU HISTORIA MERECE SER LEÍDA ✨</div><h2>Empieza tu primera carta hoy.</h2><p>Regístrate, completa tu membresía y entra a tu espacio privado.</p></div>
-  <button class="btn btn-pink btn-lg" data-modal="register">Crear mi cuenta 💌</button>
+<section class="vision section" id="vision">
+  <div class="split reverse"><div><div class="section-tag">🌟 NUESTRA VISIÓN</div><h2>Que las palabras vuelvan a tener <em>un significado especial.</em></h2><p>Soñamos con construir una comunidad que llegue a personas de diferentes lugares, creando una red de cartas, emociones y conexiones reales. Queremos que cada persona que reciba una carta pueda sentir que, en algún lugar, alguien pensó en ella y decidió regalarle unas palabras que podrían cambiarle el día.</p></div><div class="vision-orb">💫</div></div>
+</section>
+
+<section class="reviews section" id="reviews">
+ <div class="section-tag">⭐ REVIEWS</div><h2>Historias que <em>nos inspiran.</em></h2>
+ <div class="review-grid"><article>“Una carta puede parecer pequeña, pero lo que provoca en el corazón es enorme.”<b>— Comunidad Carta Digital</b></article><article>“Quiero que cada persona pueda sentir que sus palabras importan.”<b>— Carta Digital 💌</b></article><article>“Aquí las palabras tienen un lugar para quedarse.”<b>— Nuestra comunidad</b></article></div>
+</section>
+
+<section class="membership section">
+ <div class="membership-card"><div><div class="section-tag">👑 CARTA DIGITAL PREMIUM</div><h2>Un espacio hecho para <em>conectar.</em></h2><p>Acceso a la comunidad, cartas, reflexiones, grupos, diseños premium y experiencias especiales.</p></div><div class="price"><strong>$20</strong><span>/ mes</span><button class="primary" onclick="openModal('register')">Quiero ser miembro 💗</button></div></div>
 </section>
 </main>
 
-<footer><div class="brand">💌 Mi Carta Digital ✦</div><p>Una carta puede cambiar un día entero.</p><small>© 2026 Mi Carta Digital</small></footer>
+<footer><div class="brand">💌 Carta Digital</div><p>Palabras que conectan corazones.</p><button class="admin-link" onclick="openModal('admin')">Panel administrativo</button></footer>
 
-<button id="musicBtn" class="music-btn" title="Música suave">♫ <span>Música</span></button>
-
-<div id="modal" class="modal" aria-hidden="true">
-  <div class="modal-box glass">
-    <button class="modal-close" data-close>×</button>
-    <div id="loginPanel">
-      <div class="eyebrow">BIENVENID@ DE VUELTA 💗</div><h2>Iniciar sesión</h2>
-      <form id="loginForm"><input type="email" placeholder="Correo electrónico" required><input type="password" placeholder="Contraseña" required><button class="btn btn-pink">Entrar ✨</button></form>
-    </div>
-    <div id="registerPanel">
-      <div class="eyebrow">BIENVENID@ A TU NUEVO ESPACIO 💌</div><h2>Crea tu cuenta</h2>
-      <form id="registerForm"><input id="regName" type="text" placeholder="Nombre completo" required><input id="regEmail" type="email" placeholder="Correo electrónico" required><input id="regPassword" type="password" placeholder="Crea una contraseña" minlength="6" required><label class="check"><input type="checkbox" required> Acepto los términos de la comunidad.</label><button class="btn btn-pink">Continuar al pago 💖</button></form>
-      <p class="form-note">Después del pago, el servidor puede crear/activar la cuenta y enviar el correo de bienvenida. GitHub Pages por sí solo no puede enviar correos ni procesar pagos de forma segura.</p>
-    </div>
-  </div>
-</div>
+<div class="modal" id="modal"><div class="modal-box"><button class="close" onclick="closeModal()">×</button><div id="modalContent"></div></div></div>
+<div class="toast" id="toast"></div>
 <script src="app.js"></script>
 </body></html>
