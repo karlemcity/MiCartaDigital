@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Mi espacio | Mi Carta Digital</title><link rel="stylesheet" href="styles.css"></head>
+<body class="dashboard-body">
+<header class="site-header"><a class="brand" href="dashboard.html">💌 <span>Mi Carta<small> DIGITAL</small></span></a><nav class="nav"><a href="#buzon">Mi Buzón</a><a href="#escribir">Escribir</a><a href="#reflexiones">Reflexiones</a><a href="#grupos">Grupos</a><button class="btn ghost" id="logout">Cerrar sesión</button></nav></header>
+<main class="dashboard section">
+  <div class="welcome"><div><p class="eyebrow">TU ESPACIO PRIVADO</p><h1>¡Bienvenida/o, <span id="userName">amiga/o</span>! 💗</h1><p class="muted">Aquí comienza tu historia de palabras, cartas y conexiones.</p></div><div class="membership-badge">👑 Membresía activa<br><small>$20/mes</small></div></div>
+  <div class="dash-grid">
+    <aside class="side-menu"><button class="active">🏠 Inicio</button><button>💌 Mi Buzón</button><button>✍️ Crear Carta</button><button>🌷 Reflexiones</button><button>👥 Mis Grupos</button><button>⚙️ Configuración</button></aside>
+    <section class="dash-content">
+      <div class="stats"><div><b>12</b><small>Cartas enviadas</small></div><div><b>8</b><small>Cartas recibidas</small></div><div><b>3</b><small>Nuevas conexiones</small></div></div>
+      <div id="buzon" class="inbox glass"><div class="section-title"><h2>💌 Mi Buzón</h2><button class="btn primary" onclick="location.href='#escribir'">Escribir Carta</button></div>
+        <article><span>🌷</span><div><b>De: Alguien especial</b><p>“Nunca olvides lo mucho que valen tus palabras.”</p></div><small>Hace 2 horas</small></article>
+        <article><span>💗</span><div><b>De: Compañera de vida</b><p>“Sigue brillando y sigue escribiendo.”</p></div><small>Ayer</small></article>
+        <article><span>✨</span><div><b>De: Nuevo amigo</b><p>“Gracias por dejar una huella bonita.”</p></div><small>Hace 2 días</small></article>
+      </div>
+      <div id="escribir" class="glass compose-mini"><p class="eyebrow">CREAR CARTA</p><h2>¿Qué quieres decir hoy?</h2><textarea placeholder="Escribe desde el corazón..."></textarea><button class="btn primary">Guardar borrador 💗</button></div>
+      <div id="reflexiones" class="reflection"><p class="eyebrow">REFLEXIÓN</p><p>“No subestimes el poder de una palabra amable.” ✨</p></div>
+    </section>
+  </div>
+</main>
+<footer><div class="brand">💌 Mi Carta Digital</div><p>Tu espacio. Tus palabras. Tu historia.</p></footer>
+<script src="dashboard.js"></script></body></html>
