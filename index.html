@@ -6,81 +6,414 @@
 <title>Carta Digital 💌</title>
 <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
-<div class="ambient"><span></span><span></span><span></span><span></span><span></span></div>
+
+<div class="ambient">
+  <span></span><span></span><span></span><span></span>
+  <span></span><span></span><span></span>
+</div>
+
 <div class="particles" id="particles"></div>
 
 <header class="topbar">
   <div class="brand">💌 <span>Carta Digital</span></div>
+
   <nav>
-    <a href="#inicio">Inicio</a><a href="#mision">Misión</a><a href="#vision">Visión</a><a href="#reviews">Reviews</a>
-    <button class="ghost" onclick="openModal('login')">Entrar</button>
-    <button class="primary" onclick="openModal('register')">Registrarme ✨</button>
+    <a href="#inicio">Inicio</a>
+    <a href="#mision">Misión</a>
+    <a href="#vision">Visión</a>
+    <a href="#reviews">Reviews</a>
+
+    <button class="ghost" onclick="openModal('login')">
+      Entrar
+    </button>
+
+    <button class="primary" onclick="openModal('register')">
+      Registrarme ✨
+    </button>
   </nav>
 </header>
 
 <main id="inicio">
+
 <section class="hero">
+
   <div class="hero-copy">
-    <div class="eyebrow">PALABRAS QUE CONECTAN CORAZONES</div>
-    <h1>Siempre sé tú,<br><em>sin importar los demás.</em> ✨</h1>
-    <p class="lead">Una carta puede llegar donde muchas palabras no llegan. Descubre un espacio para escribir, recibir, acompañar y regalar esperanza.</p>
-    <div class="actions"><button class="primary big" onclick="openModal('register')">Crear mi cuenta 💌</button><button class="glass big" onclick="scrollToSection('daily')">Reflexión del día ↓</button></div>
-    <div class="trust"><span>✦ Comunidad con propósito</span><span>✦ Cartas revisadas</span><span>✦ Diseño premium</span></div>
-  </div>
-  <div class="envelope-stage">
-    <div class="sparkle s1">✦</div><div class="sparkle s2">✧</div><div class="sparkle s3">✦</div>
-    <div class="envelope" onclick="openLetter()">
-      <div class="envelope-flap"></div><div class="seal">❤</div>
-      <div class="letter"><span>Para alguien especial</span><strong>Hay palabras que llegan justo cuando el corazón las necesita.</strong><small>Con cariño, Carta Digital 💌</small></div>
+
+    <div class="eyebrow">
+      PALABRAS QUE CONECTAN CORAZONES
     </div>
-    <div class="hint">Toca el sobre para abrirlo ✨</div>
+
+    <h1>
+      Siempre sé tú,<br>
+      <em>sin importar los demás.</em> ✨
+    </h1>
+
+    <p class="lead">
+      Una carta puede llegar donde muchas palabras no llegan.
+      Descubre un espacio para escribir, recibir, acompañar
+      y regalar esperanza.
+    </p>
+
+    <div class="actions">
+
+      <button class="primary big" onclick="openModal('register')">
+        Crear mi cuenta 💌
+      </button>
+
+      <button class="glass big" onclick="scrollToSection('daily')">
+        Reflexión del día ↓
+      </button>
+
+    </div>
+
+    <div class="trust">
+      <span>✦ Comunidad con propósito</span>
+      <span>✦ Cartas revisadas</span>
+      <span>✦ Diseño premium</span>
+    </div>
+
   </div>
+
+  <div class="envelope-stage">
+
+    <div class="sparkle s1">✦</div>
+    <div class="sparkle s2">✧</div>
+    <div class="sparkle s3">✦</div>
+
+    <div class="envelope" onclick="openLetter()">
+
+      <div class="envelope-flap"></div>
+
+      <div class="seal">
+        ❤
+      </div>
+
+      <div class="letter">
+        <span>Para alguien especial</span>
+
+        <strong>
+          Hay palabras que llegan justo cuando
+          el corazón las necesita.
+        </strong>
+
+        <small>
+          Con cariño, Carta Digital 💌
+        </small>
+      </div>
+
+    </div>
+
+    <div class="hint">
+      Toca el sobre para abrirlo ✨
+    </div>
+
+  </div>
+
 </section>
+
 
 <section class="daily section" id="daily">
-  <div class="section-tag">✨ REFLEXIÓN DEL DÍA</div>
-  <div class="quote-card">
-    <div class="quote-mark">“</div>
-    <h2>Siempre sé tú, sin importar los demás.</h2>
-    <p>No cambies tu esencia para encajar en lugares donde nunca valorarán quién eres. Tu forma de sentir, soñar y seguir adelante tiene un valor único. A veces, ser tú mismo es el acto de amor propio más bonito que puedes regalarte.</p>
-    <span>— Carta Digital 🌷</span>
+
+  <div class="section-tag">
+    ✨ REFLEXIÓN DEL DÍA
   </div>
+
+  <div class="quote-card">
+
+    <div class="quote-mark">
+      “
+    </div>
+
+    <h2>
+      Siempre sé tú, sin importar los demás.
+    </h2>
+
+    <p>
+      No cambies tu esencia para encajar en lugares
+      donde nunca valorarán quién eres. Tu forma de
+      sentir, soñar y seguir adelante tiene un valor único.
+      A veces, ser tú mismo es el acto de amor propio
+      más bonito que puedes regalarte.
+    </p>
+
+    <span>
+      — Carta Digital 🌷
+    </span>
+
+  </div>
+
 </section>
+
 
 <section class="features section">
-  <div class="section-tag">💫 UN LUGAR PARA SENTIR</div><h2>Haz que tus palabras <em>dejen huella.</em></h2>
-  <div class="grid">
-    <article><i>💌</i><h3>Crear Carta</h3><p>Escribe mensajes con fondos, flores, stickers, corazones y una firma especial.</p></article>
-    <article><i>📬</i><h3>Mi Buzón</h3><p>Recibe y guarda tus cartas en un espacio íntimo y bonito.</p></article>
-    <article><i>🦋</i><h3>Reflexiones</h3><p>Pequeñas palabras para acompañar grandes momentos.</p></article>
-    <article><i>👥</i><h3>Grupos</h3><p>Conecta con personas dentro de una comunidad organizada y cuidada.</p></article>
-    <article><i>🌸</i><h3>Decoración</h3><p>Flores, mariposas, estrellas y detalles animados para hacer cada carta única.</p></article>
-    <article><i>👑</i><h3>Membresía</h3><p>Acceso premium por $20 al mes con beneficios especiales.</p></article>
+
+  <div class="section-tag">
+    💫 UN LUGAR PARA SENTIR
   </div>
+
+  <h2>
+    Haz que tus palabras <em>dejen huella.</em>
+  </h2>
+
+  <div class="grid">
+
+    <article>
+      <i>💌</i>
+      <h3>Crear Carta</h3>
+      <p>
+        Escribe mensajes con fondos, flores, stickers,
+        corazones y una firma especial.
+      </p>
+    </article>
+
+    <article>
+      <i>📬</i>
+      <h3>Mi Buzón</h3>
+      <p>
+        Recibe y guarda tus cartas en un espacio
+        íntimo y bonito.
+      </p>
+    </article>
+
+    <article>
+      <i>🦋</i>
+      <h3>Reflexiones</h3>
+      <p>
+        Pequeñas palabras para acompañar grandes momentos.
+      </p>
+    </article>
+
+    <article>
+      <i>👥</i>
+      <h3>Grupos</h3>
+      <p>
+        Conecta con personas dentro de una comunidad
+        organizada y cuidada.
+      </p>
+    </article>
+
+    <article>
+      <i>🌸</i>
+      <h3>Decoración</h3>
+      <p>
+        Flores, mariposas, estrellas y detalles animados
+        para hacer cada carta única.
+      </p>
+    </article>
+
+    <article>
+      <i>👑</i>
+      <h3>Membresía</h3>
+      <p>
+        Acceso premium por $20 al mes con beneficios especiales.
+      </p>
+    </article>
+
+  </div>
+
 </section>
+
 
 <section class="mission section" id="mision">
-  <div class="split"><div class="flower-orb">🌷</div><div><div class="section-tag">🌷 NUESTRA MISIÓN</div><h2>Conectar corazones <em>a través de las palabras.</em></h2><p>En Carta Digital creamos un espacio donde cada mensaje tiene un propósito: acompañar, inspirar, escuchar y regalar un momento de esperanza. Queremos transformar simples palabras en experiencias significativas, creando conexiones que lleven alegría, apoyo y cariño a quienes más lo necesitan.</p></div></div>
+
+  <div class="split">
+
+    <div class="flower-orb">
+      🌷
+    </div>
+
+    <div>
+
+      <div class="section-tag">
+        🌷 NUESTRA MISIÓN
+      </div>
+
+      <h2>
+        Conectar corazones
+        <em>a través de las palabras.</em>
+      </h2>
+
+      <p>
+        En Carta Digital creamos un espacio donde cada
+        mensaje tiene un propósito: acompañar, inspirar,
+        escuchar y regalar un momento de esperanza.
+        Queremos transformar simples palabras en experiencias
+        significativas, creando conexiones que lleven alegría,
+        apoyo y cariño a quienes más lo necesitan.
+      </p>
+
+    </div>
+
+  </div>
+
 </section>
+
 
 <section class="vision section" id="vision">
-  <div class="split reverse"><div><div class="section-tag">🌟 NUESTRA VISIÓN</div><h2>Que las palabras vuelvan a tener <em>un significado especial.</em></h2><p>Soñamos con construir una comunidad que llegue a personas de diferentes lugares, creando una red de cartas, emociones y conexiones reales. Queremos que cada persona que reciba una carta pueda sentir que, en algún lugar, alguien pensó en ella y decidió regalarle unas palabras que podrían cambiarle el día.</p></div><div class="vision-orb">💫</div></div>
+
+  <div class="split reverse">
+
+    <div>
+
+      <div class="section-tag">
+        🌟 NUESTRA VISIÓN
+      </div>
+
+      <h2>
+        Que las palabras vuelvan a tener
+        <em>un significado especial.</em>
+      </h2>
+
+      <p>
+        Soñamos con construir una comunidad que llegue
+        a personas de diferentes lugares, creando una red
+        de cartas, emociones y conexiones reales.
+        Queremos que cada persona que reciba una carta
+        pueda sentir que, en algún lugar, alguien pensó
+        en ella y decidió regalarle unas palabras que
+        podrían cambiarle el día.
+      </p>
+
+    </div>
+
+    <div class="vision-orb">
+      💫
+    </div>
+
+  </div>
+
 </section>
+
 
 <section class="reviews section" id="reviews">
- <div class="section-tag">⭐ REVIEWS</div><h2>Historias que <em>nos inspiran.</em></h2>
- <div class="review-grid"><article>“Una carta puede parecer pequeña, pero lo que provoca en el corazón es enorme.”<b>— Comunidad Carta Digital</b></article><article>“Quiero que cada persona pueda sentir que sus palabras importan.”<b>— Carta Digital 💌</b></article><article>“Aquí las palabras tienen un lugar para quedarse.”<b>— Nuestra comunidad</b></article></div>
+
+  <div class="section-tag">
+    ⭐ REVIEWS
+  </div>
+
+  <h2>
+    Historias que <em>nos inspiran.</em>
+  </h2>
+
+  <div class="review-grid">
+
+    <article>
+      “Una carta puede parecer pequeña,
+      pero lo que provoca en el corazón es enorme.”
+      <b>— Comunidad Carta Digital</b>
+    </article>
+
+    <article>
+      “Quiero que cada persona pueda sentir
+      que sus palabras importan.”
+      <b>— Carta Digital 💌</b>
+    </article>
+
+    <article>
+      “Aquí las palabras tienen un lugar para quedarse.”
+      <b>— Nuestra comunidad</b>
+    </article>
+
+  </div>
+
 </section>
+
 
 <section class="membership section">
- <div class="membership-card"><div><div class="section-tag">👑 CARTA DIGITAL PREMIUM</div><h2>Un espacio hecho para <em>conectar.</em></h2><p>Acceso a la comunidad, cartas, reflexiones, grupos, diseños premium y experiencias especiales.</p></div><div class="price"><strong>$20</strong><span>/ mes</span><button class="primary" onclick="openModal('register')">Quiero ser miembro 💗</button></div></div>
+
+  <div class="membership-card">
+
+    <div>
+
+      <div class="section-tag">
+        👑 CARTA DIGITAL PREMIUM
+      </div>
+
+      <h2>
+        Un espacio hecho para <em>conectar.</em>
+      </h2>
+
+      <p>
+        Acceso a la comunidad, cartas, reflexiones,
+        grupos, diseños premium y experiencias especiales.
+      </p>
+
+    </div>
+
+    <div class="price">
+
+      <strong>$20</strong>
+      <span>/ mes</span>
+
+      <button class="primary" onclick="openModal('register')">
+        Quiero ser miembro 💗
+      </button>
+
+    </div>
+
+  </div>
+
 </section>
+
 </main>
 
-<footer><div class="brand">💌 Carta Digital</div><p>Palabras que conectan corazones.</p><button class="admin-link" onclick="openModal('admin')">Panel administrativo</button></footer>
 
-<div class="modal" id="modal"><div class="modal-box"><button class="close" onclick="closeModal()">×</button><div id="modalContent"></div></div></div>
+<footer>
+
+  <div class="brand">
+    💌 Carta Digital
+  </div>
+
+  <p>
+    Palabras que conectan corazones.
+  </p>
+
+  <button class="admin-link" onclick="openModal('admin')">
+    Panel administrativo
+  </button>
+
+</footer>
+
+
+<div class="modal" id="modal">
+
+  <div class="modal-box">
+
+    <button class="close" onclick="closeModal()">
+      ×
+    </button>
+
+    <div id="modalContent"></div>
+
+  </div>
+
+</div>
+
+
 <div class="toast" id="toast"></div>
+
+
+<!-- SUPABASE -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+const SUPABASE_URL =
+  "https://jdzgzlavnbmedcfyzymt.supabase.co";
+
+const SUPABASE_KEY =
+  "sb_publishable_TzkIQj0d99Vdjvv6Eixisg_FMmQTdoX";
+
+const supabaseClient =
+  window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+  );
+</script>
+
+<!-- TU JAVASCRIPT -->
 <script src="app.js"></script>
-</body></html>
+
+</body>
+</html>
