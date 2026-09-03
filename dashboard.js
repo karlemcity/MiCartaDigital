@@ -1,4 +1,4 @@
-\// ==========================================
+ // ==========================================
 // MI CARTA DIGITAL 💌
 // DASHBOARD.JS
 // ==========================================
@@ -7,28 +7,23 @@ let currentUser = null;
 
 
 // ==========================================
-// INICIAR DASHBOARD
+// INICIAR
 // ==========================================
 
 document.addEventListener("DOMContentLoaded", async () => {
-
-  await checkUser();
-
   createParticles();
-
+  await checkUser();
 });
 
 
 // ==========================================
-// COMPROBAR USUARIO
+// USUARIO
 // ==========================================
 
 async function checkUser() {
-
   try {
-
-    if (!supabaseClient) {
-      toast("❌ Supabase no está conectado.");
+    if (!window.supabaseClient) {
+      console.error("Supabase no conectado");
       return;
     }
 
@@ -43,12 +38,11 @@ async function checkUser() {
     currentUser = data.user;
 
     if (!currentUser) {
-
       toast("💗 Debes iniciar sesión.");
 
       setTimeout(() => {
         window.location.href = "index.html";
-      }, 1200);
+      }, 1000);
 
       return;
     }
@@ -56,24 +50,19 @@ async function checkUser() {
     loadProfile();
 
   } catch (error) {
-
     console.error(error);
-
   }
-
 }
 
 
 // ==========================================
-// CARGAR PERFIL
+// PERFIL
 // ==========================================
 
 function loadProfile() {
-
   if (!currentUser) return;
 
-  const metadata =
-    currentUser.user_metadata || {};
+  const metadata = currentUser.user_metadata || {};
 
   const name =
     metadata.name ||
@@ -82,62 +71,40 @@ function loadProfile() {
 
   const email =
     currentUser.email ||
-    "Sin correo";
+    "";
 
 
-  const welcomeName =
-    document.getElementById("welcomeName");
-
-  const miniName =
-    document.getElementById("miniName");
-
-  const profileName =
-    document.getElementById("profileName");
-
-  const profileEmail =
-    document.getElementById("profileEmail");
+  const elements = {
+    welcomeName: name,
+    miniName: name,
+    profileName: name,
+    profileEmail: email
+  };
 
 
-  if (welcomeName) {
-    welcomeName.textContent = name;
-  }
+  Object.keys(elements).forEach(id => {
+    const element = document.getElementById(id);
 
-  if (miniName) {
-    miniName.textContent = name;
-  }
-
-  if (profileName) {
-    profileName.textContent = name;
-  }
-
-  if (profileEmail) {
-    profileEmail.textContent = email;
-  }
-
+    if (element) {
+      element.textContent = elements[id];
+    }
+  });
 }
 
 
 // ==========================================
-// CERRAR SESIÓN
+// SALIR
 // ==========================================
 
 async function logout() {
-
   try {
-
-    if (!supabaseClient) {
-      window.location.href = "index.html";
-      return;
-    }
 
     await supabaseClient.auth.signOut();
 
     toast("💗 Cerrando sesión...");
 
     setTimeout(() => {
-
       window.location.href = "index.html";
-
     }, 800);
 
   } catch (error) {
@@ -147,7 +114,6 @@ async function logout() {
     window.location.href = "index.html";
 
   }
-
 }
 
 
@@ -159,23 +125,16 @@ function toggleTheme() {
 
   document.body.classList.toggle("dream-mode");
 
-  if (
-    document.body.classList.contains("dream-mode")
-  ) {
-
+  if (document.body.classList.contains("dream-mode")) {
     toast("✨ Ambiente mágico activado.");
-
   } else {
-
     toast("🌷 Ambiente original restaurado.");
-
   }
-
 }
 
 
 // ==========================================
-// PREVISUALIZAR CARTA
+// PREVISUALIZACIÓN DE CARTA
 // ==========================================
 
 function preview() {
@@ -193,24 +152,32 @@ function preview() {
     document.getElementById("previewText");
 
 
-  if (!recipient || !message) return;
+  if (!message) return;
 
 
   if (title) {
 
-    title.textContent =
-      recipient.value.trim()
-        ? `Una carta para ${recipient.value.trim()}`
-        : "Una carta para ti";
+    if (recipient && recipient.value.trim()) {
+
+      title.textContent =
+        "Una carta para " +
+        recipient.value.trim();
+
+    } else {
+
+      title.textContent =
+        "Una carta para ti";
+
+    }
 
   }
 
 
   if (text) {
 
-    text.textContent =
+    text.innerHTML =
       message.value.trim()
-        ? message.value.trim()
+        ? formatLetter(message.value)
         : "Tus palabras pueden iluminar un día.";
 
   }
@@ -219,7 +186,7 @@ function preview() {
 
 
 // ==========================================
-// AGREGAR EMOJI
+// EMOJIS 💗🌸🦋✨
 // ==========================================
 
 function addEmoji(emoji) {
@@ -229,11 +196,13 @@ function addEmoji(emoji) {
 
   if (!message) return;
 
+
   const start =
-    message.selectionStart;
+    message.selectionStart ?? message.value.length;
 
   const end =
-    message.selectionEnd;
+    message.selectionEnd ?? message.value.length;
+
 
   const before =
     message.value.substring(0, start);
@@ -241,22 +210,123 @@ function addEmoji(emoji) {
   const after =
     message.value.substring(end);
 
+
   message.value =
     before + emoji + after;
 
+
   message.focus();
 
+
+  const newPosition =
+    start + emoji.length;
+
   message.selectionStart =
-    message.selectionEnd =
-      start + emoji.length;
+    newPosition;
+
+  message.selectionEnd =
+    newPosition;
+
 
   preview();
 
+
+  // Animación de corazón al agregar decoración
+  createFloatingDecoration(emoji);
 }
 
 
 // ==========================================
-// ENVIAR CARTA A REVISIÓN
+// FORMATO DE LA CARTA
+// ==========================================
+
+function formatLetter(text) {
+
+  return escapeHTML(text)
+    .replace(/\n/g, "<br>")
+    .replace(/💗/g, "<span class='letter-heart'>💗</span>")
+    .replace(/❤️/g, "<span class='letter-heart'>❤️</span>")
+    .replace(/💕/g, "<span class='letter-heart'>💕</span>")
+    .replace(/🌸/g, "<span class='letter-flower'>🌸</span>")
+    .replace(/🦋/g, "<span class='letter-butterfly'>🦋</span>")
+    .replace(/✨/g, "<span class='letter-sparkle'>✨</span>")
+    .replace(/🌷/g, "<span class='letter-flower'>🌷</span>");
+}
+
+
+// ==========================================
+// SEGURIDAD HTML
+// ==========================================
+
+function escapeHTML(text) {
+
+  const div =
+    document.createElement("div");
+
+  div.textContent = text;
+
+  return div.innerHTML;
+}
+
+
+// ==========================================
+// DECORACIÓN FLOTANTE
+// ==========================================
+
+function createFloatingDecoration(symbol) {
+
+  const decoration =
+    document.createElement("div");
+
+  decoration.textContent =
+    symbol;
+
+  decoration.style.position =
+    "fixed";
+
+  decoration.style.left =
+    "50%";
+
+  decoration.style.top =
+    "55%";
+
+  decoration.style.fontSize =
+    "30px";
+
+  decoration.style.zIndex =
+    "9999";
+
+  decoration.style.pointerEvents =
+    "none";
+
+  decoration.style.transition =
+    "all 1.2s ease";
+
+  document.body.appendChild(decoration);
+
+
+  setTimeout(() => {
+
+    decoration.style.transform =
+      `translate(
+        ${(Math.random() - 0.5) * 300}px,
+        -180px
+      ) scale(1.5)`;
+
+    decoration.style.opacity =
+      "0";
+
+  }, 50);
+
+
+  setTimeout(() => {
+    decoration.remove();
+  }, 1300);
+}
+
+
+// ==========================================
+// ENVIAR CARTA
 // ==========================================
 
 async function submitLetter() {
@@ -268,7 +338,10 @@ async function submitLetter() {
     document.getElementById("message");
 
 
-  if (!recipient || !message) return;
+  if (!recipient || !message) {
+    toast("❌ No se encontró el formulario.");
+    return;
+  }
 
 
   const recipientEmail =
@@ -285,7 +358,6 @@ async function submitLetter() {
     recipient.focus();
 
     return;
-
   }
 
 
@@ -296,35 +368,27 @@ async function submitLetter() {
     message.focus();
 
     return;
-
   }
 
 
   if (!currentUser) {
 
-    toast("❌ Debes iniciar sesión.");
+    toast("❌ Tu sesión no está activa.");
 
     return;
-
   }
 
 
+  toast("💌 Preparando tu carta...");
+
+
+  /*
+   * Intentamos guardar la carta.
+   * Si la tabla todavía no existe,
+   * mostramos un mensaje claro.
+   */
+
   try {
-
-    toast("💌 Enviando carta a revisión...");
-
-
-    /*
-      IMPORTANTE:
-
-      Esta función está preparada para la tabla
-      "letters".
-
-      Si todavía no existe esa tabla en Supabase,
-      no pasa nada: te mostrará el error y luego
-      crearemos la tabla.
-    */
-
 
     const { data, error } =
       await supabaseClient
@@ -343,35 +407,33 @@ async function submitLetter() {
             "pending"
 
         })
-        .select()
-        .single();
+        .select();
 
 
     if (error) {
 
       console.error(
-        "ERROR CARTA:",
+        "Error guardando carta:",
         error
       );
 
+
       toast(
-        "❌ La carta todavía necesita configurarse en la base de datos."
+        "💌 Tu carta está lista, pero todavía falta conectar la tabla de cartas."
       );
 
       return;
-
     }
 
 
-    message.value = "";
-
     recipient.value = "";
+    message.value = "";
 
     preview();
 
 
     toast(
-      "💌 ¡Carta enviada! Quedó pendiente de revisión."
+      "💌 ¡Carta enviada a revisión!"
     );
 
 
@@ -380,11 +442,10 @@ async function submitLetter() {
     console.error(error);
 
     toast(
-      "❌ No se pudo enviar la carta."
+      "❌ No se pudo guardar la carta."
     );
 
   }
-
 }
 
 
@@ -395,23 +456,19 @@ async function submitLetter() {
 async function editProfile() {
 
   if (!currentUser) {
-
-    toast("❌ No hay usuario conectado.");
-
+    toast("❌ No hay una cuenta activa.");
     return;
-
   }
 
 
-  const currentName =
-    currentUser.user_metadata?.name ||
-    "";
+  const oldName =
+    currentUser.user_metadata?.name || "";
 
 
   const newName =
     prompt(
       "💗 Escribe tu nuevo nombre:",
-      currentName
+      oldName
     );
 
 
@@ -424,10 +481,9 @@ async function editProfile() {
 
   if (!name) {
 
-    toast("❌ El nombre no puede estar vacío.");
+    toast("❌ Escribe un nombre.");
 
     return;
-
   }
 
 
@@ -448,20 +504,21 @@ async function editProfile() {
       console.error(error);
 
       toast(
-        "❌ No se pudo actualizar el perfil."
+        "❌ No se pudo actualizar tu nombre."
       );
 
       return;
-
     }
 
 
-    currentUser = data.user;
+    currentUser =
+      data.user;
 
     loadProfile();
 
+
     toast(
-      "✨ Tu perfil fue actualizado."
+      "✨ Perfil actualizado."
     );
 
 
@@ -474,12 +531,11 @@ async function editProfile() {
     );
 
   }
-
 }
 
 
 // ==========================================
-// PANEL ADMINISTRATIVO
+// PANEL ADMIN
 // ==========================================
 
 function showAdmin() {
@@ -489,17 +545,18 @@ function showAdmin() {
 
   if (!admin) return;
 
+
   admin.scrollIntoView({
     behavior: "smooth"
   });
 
-  loadAdminStats();
 
+  loadAdminStats();
 }
 
 
 // ==========================================
-// ESTADÍSTICAS ADMIN
+// ESTADÍSTICAS
 // ==========================================
 
 async function loadAdminStats() {
@@ -517,35 +574,22 @@ async function loadAdminStats() {
     document.getElementById("memberships");
 
 
-  /*
-    Todavía no mostramos datos falsos.
-
-    Cuando creemos las tablas correspondientes
-    conectaremos estos números a Supabase.
-  */
-
-
-  if (users) {
+  if (users)
     users.textContent = "—";
-  }
 
-  if (pending) {
+  if (pending)
     pending.textContent = "—";
-  }
 
-  if (reviews) {
+  if (reviews)
     reviews.textContent = "—";
-  }
 
-  if (memberships) {
+  if (memberships)
     memberships.textContent = "—";
-  }
-
 }
 
 
 // ==========================================
-// CARTAS PENDIENTES
+// ADMIN - CARTAS
 // ==========================================
 
 async function loadPendingLetters() {
@@ -558,32 +602,34 @@ async function loadPendingLetters() {
 
 
   results.innerHTML = `
+
     <div class="admin-result-card">
+
       <h3>💌 Cartas pendientes</h3>
 
       <p>
-        Aquí aparecerán las cartas que
-        necesitan aprobación.
+        Aquí aparecerán las cartas
+        enviadas por los miembros.
       </p>
 
       <p>
-        🛡️ Primero debemos terminar
-        de conectar la tabla de cartas
-        con Supabase.
+        🛡️ Podrás revisarlas antes
+        de aprobarlas.
       </p>
+
     </div>
+
   `;
 
 
   toast(
-    "💌 Preparando moderación..."
+    "💌 Sección de cartas preparada."
   );
-
 }
 
 
 // ==========================================
-// USUARIOS
+// ADMIN - USUARIOS
 // ==========================================
 
 async function loadUsers() {
@@ -596,36 +642,29 @@ async function loadUsers() {
 
 
   results.innerHTML = `
+
     <div class="admin-result-card">
 
-      <h3>
-        👥 Usuarios
-      </h3>
+      <h3>👥 Usuarios registrados</h3>
 
       <p>
-        El panel mostrará aquí los
-        miembros de Carta Digital.
-      </p>
-
-      <p>
-        🔐 La información administrativa
-        se conectará mediante las reglas
-        de seguridad de Supabase.
+        Aquí aparecerán los miembros
+        de Mi Carta Digital.
       </p>
 
     </div>
+
   `;
 
 
   toast(
-    "👥 Sección de usuarios preparada."
+    "👥 Sección de usuarios."
   );
-
 }
 
 
 // ==========================================
-// REVIEWS
+// ADMIN - REVIEWS
 // ==========================================
 
 async function loadReviews() {
@@ -638,30 +677,29 @@ async function loadReviews() {
 
 
   results.innerHTML = `
+
     <div class="admin-result-card">
 
-      <h3>
-        ⭐ Reviews
-      </h3>
+      <h3>⭐ Reviews</h3>
 
       <p>
-        Aquí podrás revisar las opiniones
-        de la comunidad.
+        Aquí podrás administrar
+        las opiniones de la comunidad.
       </p>
 
     </div>
+
   `;
 
 
   toast(
-    "⭐ Sección de reviews preparada."
+    "⭐ Sección de reviews."
   );
-
 }
 
 
 // ==========================================
-// MEMBRESÍAS
+// ADMIN - MEMBRESÍAS
 // ==========================================
 
 async function loadMemberships() {
@@ -674,30 +712,24 @@ async function loadMemberships() {
 
 
   results.innerHTML = `
+
     <div class="admin-result-card">
 
-      <h3>
-        👑 Membresías
-      </h3>
+      <h3>👑 Membresías</h3>
 
       <p>
         Aquí aparecerán los miembros
-        Premium y sus estados.
-      </p>
-
-      <p>
-        💳 El sistema de pagos se conectará
-        posteriormente.
+        Premium.
       </p>
 
     </div>
+
   `;
 
 
   toast(
-    "👑 Sección de membresías preparada."
+    "👑 Sección de membresías."
   );
-
 }
 
 
@@ -724,7 +756,7 @@ function createParticles() {
   ];
 
 
-  symbols.forEach((symbol) => {
+  symbols.forEach(symbol => {
 
     for (let i = 0; i < 3; i++) {
 
@@ -747,16 +779,14 @@ function createParticles() {
         -Math.random() * 20 + "s";
 
       container.appendChild(item);
-
     }
 
   });
-
 }
 
 
 // ==========================================
-// TOAST
+// MENSAJES
 // ==========================================
 
 function toast(message) {
@@ -778,24 +808,45 @@ function toast(message) {
     element.classList.remove("show");
 
   }, 4000);
-
 }
 
 
 // ==========================================
-// HACER TOAST DISPONIBLE EN HTML
+// FUNCIONES GLOBALES
 // ==========================================
 
-window.toast = toast;
+window.logout =
+  logout;
 
-window.logout = logout;
-window.toggleTheme = toggleTheme;
-window.preview = preview;
-window.addEmoji = addEmoji;
-window.submitLetter = submitLetter;
-window.editProfile = editProfile;
-window.showAdmin = showAdmin;
-window.loadPendingLetters = loadPendingLetters;
-window.loadUsers = loadUsers;
-window.loadReviews = loadReviews;
-window.loadMemberships = loadMemberships;
+window.toggleTheme =
+  toggleTheme;
+
+window.preview =
+  preview;
+
+window.addEmoji =
+  addEmoji;
+
+window.submitLetter =
+  submitLetter;
+
+window.editProfile =
+  editProfile;
+
+window.showAdmin =
+  showAdmin;
+
+window.loadPendingLetters =
+  loadPendingLetters;
+
+window.loadUsers =
+  loadUsers;
+
+window.loadReviews =
+  loadReviews;
+
+window.loadMemberships =
+  loadMemberships;
+
+window.toast =
+  toast;
