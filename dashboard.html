@@ -334,6 +334,8 @@
 
       <div class="paper">
 
+        <div id="previewDecorations" class="preview-decorations" aria-hidden="true"></div>
+
         <small>
           Para alguien especial
         </small>
@@ -387,6 +389,7 @@
 
         <button
           type="button"
+          data-emoji="💗"
           onclick="addEmoji('💗')">
           💗
         </button>
@@ -417,6 +420,12 @@
 
       </div>
 
+      <div class="decor-actions">
+        <button type="button" class="soft" id="undoDecoration" onclick="undoDecoration()">↩️ Deshacer</button>
+        <button type="button" class="soft" onclick="clearDecorations()">🧹 Quitar decoraciones</button>
+      </div>
+
+      <div id="decorationsPreview" class="decorations-preview" aria-live="polite"></div>
 
       <button
         type="button"
