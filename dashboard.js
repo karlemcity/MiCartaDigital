@@ -298,6 +298,12 @@ window.showAdmin = showAdmin;
 window.reviewLetter = reviewLetter;
 window.goToCreate = goToCreate;
 window.toggleTheme = toggleTheme;
+window.loadUsers = loadUsers;
+window.loadReviews = loadReviews;
+window.loadMemberships = loadMemberships;
+window.startMembershipCheckout = startMembershipCheckout;
+window.viewGroup = viewGroup;
+window.editProfile = editProfile;
 window.viewGroup = viewGroup;
 window.joinMembership = joinMembership;
 window.editProfile = editProfile;
@@ -366,3 +372,63 @@ window.logout = logout;
     paper.addEventListener('pointerleave',()=>paper.style.transform='');
   }
 })();
+
+
+async function loadUsers() {
+  const box = $('adminResults');
+  if (!box || typeof supabaseClient === 'undefined' || !supabaseClient) return toast('❌ Supabase no está conectado.');
+  box.innerHTML = '<p>⏳ Cargando usuarios...</p>';
+  const { data, error } = await supabaseClient.from('profiles').select('id,name,role,created_at').order('created_at',{ascending:false});
+  if (error) return box.innerHTML = `<p>❌ ${escapeHtml(error.message)}</p>`;
+  box.innerHTML = data?.length ? data.map(u=>`<article class="admin-letter"><div class="admin-letter-head"><b>👤 ${escapeHtml(u.name||'Sin nombre')}</b><span>${escapeHtml(u.role||'member')}</span></div><p>ID: ${escapeHtml(u.id)}</p></article>`).join('') : '<p>👥 No hay usuarios.</p>';
+}
+
+async function loadReviews() {
+  const box = $('adminResults');
+  if (!box || typeof supabaseClient === 'undefined' || !supabaseClient) return toast('❌ Supabase no está conectado.');
+  box.innerHTML = '<p>⏳ Cargando reviews...</p>';
+  const { data, error } = await supabaseClient.from('reviews').select('*').order('created_at',{ascending:false});
+  if (error) return box.innerHTML = `<p>❌ ${escapeHtml(error.message)}</p>`;
+  box.innerHTML = data?.length ? data.map(r=>`<article class="admin-letter"><div class="admin-letter-head"><b>⭐ ${escapeHtml(r.rating)}/5</b><span>${escapeHtml(r.created_at||'')}</span></div><p>${escapeHtml(r.comment||'Sin comentario')}</p></article>`).join('') : '<p>⭐ No hay reviews todavía.</p>';
+}
+
+async function loadMemberships() {
+  const box = $('adminResults');
+  if (!box || typeof supabaseClient === 'undefined' || !supabaseClient) return toast('❌ Supabase no está conectado.');
+  box.innerHTML = '<p>⏳ Cargando membresías...</p>';
+  const { data, error } = await supabaseClient.from('memberships').select('*').order('created_at',{ascending:false});
+  if (error) return box.innerHTML = `<p>❌ ${escapeHtml(error.message)}</p>`;
+  box.innerHTML = data?.length ? data.map(m=>`<article class="admin-letter"><div class="admin-letter-head"><b>👑 ${escapeHtml(m.status||'inactive')}</b><span>$${escapeHtml(m.price||'20.00')} / mes</span></div><p>Usuario: ${escapeHtml(m.user_id||'')}</p></article>`).join('') : '<p>👑 No hay membresías.</p>';
+}
+
+async function startMembershipCheckout() {
+  if (typeof supabaseClient === 'undefined' || !supabaseClient) return toast('❌ Supabase no está conectado.');
+  const { data:{session} } = await supabaseClient.auth.getSession();
+  if (!session?.user) return toast('🔐 Primero inicia sesión para activar tu membresía.');
+  toast('💳 Preparando tu pago de $20/mes...');
+  try {
+    const response = await fetch(`${SUPABASE_URL}/functions/v1/create-checkout-session`, {method:'POST',headers:{'Content-Type':'application/json','Authorization':`Bearer ${session.access_token}`,'apikey':SUPABASE_PUBLISHABLE_KEY},body:'{}'});
+    const data = await response.json();
+    if (!response.ok || !data.url) { console.error(data); return toast('❌ No pudimos abrir Stripe.'); }
+    window.location.href=data.url;
+  } catch(e) { console.error(e); toast('❌ Error conectando con Stripe.'); }
+}
+
+function viewGroup() {
+  $('grupos')?.scrollIntoView({behavior:'smooth'});
+}
+
+async function editProfile() {
+  if (typeof supabaseClient === 'undefined' || !supabaseClient) return toast('❌ Supabase no está conectado.');
+  const {data:{user}} = await supabaseClient.auth.getUser();
+  if (!user) return toast('🔐 Inicia sesión primero.');
+  const current = user.user_metadata?.name || '';
+  const name = window.prompt('¿Qué nombre quieres mostrar?', current);
+  if (name === null) return;
+  if (!name.trim()) return toast('💗 El nombre no puede estar vacío.');
+  const {error}=await supabaseClient.auth.updateUser({data:{name:name.trim()}});
+  if(error) return toast(`❌ ${error.message}`);
+  await supabaseClient.from('profiles').update({name:name.trim()}).eq('id',user.id);
+  await loadProfile();
+  toast('✅ Perfil actualizado.');
+}

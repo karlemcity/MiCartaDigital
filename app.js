@@ -458,11 +458,15 @@ async function register(event) {
 
     console.log("Usuario creado:", data);
 
+    sessionStorage.setItem("MCD_PENDING_MEMBERSHIP", "1");
     closeModal();
 
-    showToast(
-      "💌 ¡Cuenta creada! Revisa tu correo para confirmar tu email."
-    );
+    if (data.session?.user) {
+      showToast("💳 Cuenta creada. Abriendo el pago de $20/mes...");
+      setTimeout(() => startMembershipCheckout(), 700);
+    } else {
+      showToast("💌 Cuenta creada. Confirma tu correo y luego inicia sesión para activar la membresía.");
+    }
 
   } catch (error) {
 
