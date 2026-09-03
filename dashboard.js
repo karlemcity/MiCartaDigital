@@ -302,3 +302,67 @@ window.viewGroup = viewGroup;
 window.joinMembership = joinMembership;
 window.editProfile = editProfile;
 window.logout = logout;
+
+// ==========================================
+// EXPERIENCIA PREMIUM ✨ — movimiento + UX
+// ==========================================
+(function dashboardExperience(){
+  const particles = document.getElementById('particles');
+  if(particles){
+    const symbols=['💗','💖','💕','✨','🌸','🦋','🌷','⭐','♡','✦'];
+    for(let i=0;i<22;i++){
+      const el=document.createElement('span');
+      el.className='ambient-particle';
+      el.textContent=symbols[i%symbols.length];
+      el.style.left=(Math.random()*100)+'vw';
+      el.style.fontSize=(9+Math.random()*18)+'px';
+      el.style.animationDuration=(14+Math.random()*18)+'s';
+      el.style.animationDelay=(-Math.random()*25)+'s';
+      particles.appendChild(el);
+    }
+  }
+
+  // Secciones que aparecen con movimiento.
+  const items=document.querySelectorAll('.section,.hero-card,.stats>div,.admin-tools>div');
+  items.forEach((el,i)=>{el.classList.add('reveal');el.style.transitionDelay=Math.min((i%4)*60,180)+'ms'});
+  if('IntersectionObserver' in window){
+    const io=new IntersectionObserver(entries=>entries.forEach(entry=>{
+      if(entry.isIntersecting){entry.target.classList.add('visible');io.unobserve(entry.target)}
+    }),{threshold:.1});
+    items.forEach(el=>io.observe(el));
+  }else items.forEach(el=>el.classList.add('visible'));
+
+  // Menú lateral activo según la sección visible.
+  const links=[...document.querySelectorAll('.sidebar nav a[href^="#"]')];
+  const sections=links.map(a=>document.querySelector(a.getAttribute('href'))).filter(Boolean);
+  if('IntersectionObserver' in window && sections.length){
+    const navIO=new IntersectionObserver(entries=>entries.forEach(entry=>{
+      if(entry.isIntersecting){
+        links.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+entry.target.id));
+      }
+    }),{rootMargin:'-35% 0px -55% 0px',threshold:0});
+    sections.forEach(s=>navIO.observe(s));
+  }
+
+  // Contador visual de caracteres para el mensaje.
+  const message=document.getElementById('message');
+  if(message){
+    const counter=document.createElement('small');
+    counter.id='messageCounter';
+    counter.style.cssText='display:block;text-align:right;color:#9b7c93;font-size:11px;margin-top:-10px;margin-bottom:12px';
+    message.parentNode.insertBefore(counter,message.nextSibling);
+    const update=()=>counter.textContent=`${message.value.length} caracteres · ${message.value.trim().split(/\\s+/).filter(Boolean).length} palabras`;
+    message.addEventListener('input',update);update();
+  }
+
+  // Efecto 3D del papel al mover el mouse.
+  const paper=document.querySelector('.paper');
+  if(paper){
+    paper.addEventListener('pointermove',e=>{
+      const r=paper.getBoundingClientRect();
+      const x=(e.clientX-r.left)/r.width-.5, y=(e.clientY-r.top)/r.height-.5;
+      paper.style.transform=`perspective(700px) rotateX(${y*-3}deg) rotateY(${x*3}deg) translateY(-5px)`;
+    });
+    paper.addEventListener('pointerleave',()=>paper.style.transform='');
+  }
+})();

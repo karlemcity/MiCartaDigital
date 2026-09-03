@@ -626,3 +626,60 @@ window.addEventListener("keydown", function(event) {
   }
 
 });
+
+// ==========================================
+// EXPERIENCIA VISUAL ✨ — movimiento + efectos
+// ==========================================
+(function enhanceExperience(){
+  const root = document.body;
+  if (!root) return;
+
+  const particlesBox = document.getElementById('particles');
+  if (particlesBox) {
+    const symbols = ['💗','💖','💕','✨','🌸','🦋','🌷','⭐','♡','✦'];
+    for(let i=0;i<24;i++){
+      const el=document.createElement('span');
+      el.textContent=symbols[i%symbols.length];
+      el.style.left=(Math.random()*100)+'vw';
+      el.style.fontSize=(9+Math.random()*18)+'px';
+      el.style.animationDuration=(12+Math.random()*18)+'s';
+      el.style.animationDelay=(-Math.random()*25)+'s';
+      particlesBox.appendChild(el);
+    }
+  }
+
+  // Aparición suave de las secciones al hacer scroll.
+  const revealItems = document.querySelectorAll('section, .grid article, .review-grid article, .membership-card');
+  revealItems.forEach((el,i)=>{
+    el.classList.add('reveal');
+    el.style.transitionDelay = Math.min((i%4)*70,210)+'ms';
+  });
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver(entries=>entries.forEach(entry=>{
+      if(entry.isIntersecting){ entry.target.classList.add('visible'); observer.unobserve(entry.target); }
+    }),{threshold:.12});
+    revealItems.forEach(el=>observer.observe(el));
+  } else revealItems.forEach(el=>el.classList.add('visible'));
+
+  // Efecto de inclinación ligero en tarjetas.
+  document.querySelectorAll('.grid article,.review-grid article,.quote-card,.membership-card').forEach(card=>{
+    card.addEventListener('pointermove',e=>{
+      if(window.matchMedia('(max-width: 900px)').matches) return;
+      const r=card.getBoundingClientRect();
+      const x=(e.clientX-r.left)/r.width-.5;
+      const y=(e.clientY-r.top)/r.height-.5;
+      card.style.transform=`perspective(900px) rotateX(${y*-2}deg) rotateY(${x*2}deg) translateY(-5px)`;
+    });
+    card.addEventListener('pointerleave',()=>card.style.transform='');
+  });
+
+  // Onda al pulsar botones.
+  document.querySelectorAll('button').forEach(btn=>btn.addEventListener('click',e=>{
+    const rect=btn.getBoundingClientRect();
+    const ripple=document.createElement('span');
+    ripple.style.cssText=`position:absolute;width:12px;height:12px;border-radius:50%;background:#fff9;left:${e.clientX-rect.left-6}px;top:${e.clientY-rect.top-6}px;pointer-events:none;transform:scale(1);opacity:1;transition:.55s`;
+    btn.appendChild(ripple);
+    requestAnimationFrame(()=>{ripple.style.transform='scale(18)';ripple.style.opacity='0'});
+    setTimeout(()=>ripple.remove(),600);
+  }));
+})();
