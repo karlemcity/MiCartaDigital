@@ -1,647 +1,628 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ // ==========================================
+// MI CARTA DIGITAL 💌
+// APP.JS - REGISTRO Y LOGIN
+// ==========================================
 
-  <title>Mi Carta Digital 💌</title>
+const modal = document.getElementById("modal");
+const content = document.getElementById("modalContent");
+const toast = document.getElementById("toast");
+const particles = document.getElementById("particles");
 
-  <link rel="stylesheet" href="styles.css">
+// ==========================================
+// PARTÍCULAS BONITAS
+// ==========================================
 
-  <!-- Supabase -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+if (particles) {
+  const symbols = ["💗", "✦", "✧", "🌸", "🦋", "♡", "✨"];
 
-  <script>
-    const SUPABASE_URL =
-      'https://jdzgzlavnbmedcfyzymt.supabase.co';
+  symbols.forEach((symbol) => {
+    for (let i = 0; i < 3; i++) {
+      const item = document.createElement("span");
 
-    const SUPABASE_PUBLISHABLE_KEY =
-      'sb_publishable_TzkIQj0d99Vdjvv6Eixisg_FMmQTdoX';
+      item.textContent = symbol;
+      item.style.left = Math.random() * 100 + "vw";
+      item.style.fontSize = 10 + Math.random() * 18 + "px";
+      item.style.animationDuration = 12 + Math.random() * 15 + "s";
+      item.style.animationDelay = -Math.random() * 20 + "s";
 
-    const supabaseClient =
-      window.supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_PUBLISHABLE_KEY
-      );
-  </script>
-</head>
-
-<body>
-
-  <!-- FONDO ANIMADO -->
-  <div class="ambient">
-    <span></span>
-    <span></span>
-    <span></span>
-    <span></span>
-    <span></span>
-  </div>
-
-  <div class="particles" id="particles"></div>
+      particles.appendChild(item);
+    }
+  });
+}
 
 
-  <!-- =========================
-       BARRA SUPERIOR
-  ========================== -->
+// ==========================================
+// ABRIR MODAL
+// ==========================================
 
-  <header class="topbar">
+function openModal(type) {
 
-    <a href="#inicio" class="brand">
-      💌 <span>Mi Carta Digital</span>
-    </a>
+  if (!modal || !content) {
+    console.error("No se encontró el modal.");
+    return;
+  }
 
-    <nav>
+  // IMPORTANTE:
+  // Primero ponemos el contenido y DESPUÉS mostramos el modal.
+  modal.classList.remove("show");
 
-      <a href="#inicio">Inicio</a>
+  if (type === "register") {
 
-      <a href="#mision">Misión</a>
+    content.innerHTML = `
+      <div class="auth-card">
 
-      <a href="#vision">Visión</a>
-
-      <a href="#reviews">Reviews</a>
-
-      <button
-        class="ghost"
-        onclick="openModal('login')">
-        Entrar
-      </button>
-
-      <button
-        class="primary"
-        onclick="openModal('register')">
-        Registrarme ✨
-      </button>
-
-    </nav>
-
-  </header>
-
-
-  <!-- =========================
-       CONTENIDO PRINCIPAL
-  ========================== -->
-
-  <main id="inicio">
-
-
-    <!-- HERO -->
-
-    <section class="hero">
-
-      <div class="hero-copy">
-
-        <div class="eyebrow">
-          PALABRAS QUE CONECTAN CORAZONES
+        <div style="text-align:center;font-size:42px;">
+          💌
         </div>
 
-        <h1>
-          Siempre sé tú,
-          <br>
-          <em>sin importar los demás.</em>
-          ✨
-        </h1>
-
-        <p class="lead">
-          Una carta puede llegar donde muchas palabras no llegan.
-          Descubre un espacio para escribir, recibir, acompañar
-          y regalar esperanza.
-        </p>
-
-        <div class="actions">
-
-          <button
-            class="primary big"
-            onclick="openModal('register')">
-            Crear mi cuenta 💌
-          </button>
-
-          <button
-            class="glass big"
-            onclick="scrollToSection('daily')">
-            Reflexión del día ↓
-          </button>
-
-        </div>
-
-        <div class="trust">
-
-          <span>
-            ✦ Comunidad con propósito
-          </span>
-
-          <span>
-            ✦ Cartas revisadas
-          </span>
-
-          <span>
-            ✦ Espacio privado
-          </span>
-
-        </div>
-
-      </div>
-
-
-      <!-- SOBRE -->
-
-      <div class="envelope-stage">
-
-        <div class="sparkle s1">✦</div>
-
-        <div class="sparkle s2">✧</div>
-
-        <div class="sparkle s3">✦</div>
-
-        <div
-          class="envelope"
-          onclick="openLetter()">
-
-          <div class="envelope-flap"></div>
-
-          <div class="seal">
-            ❤
-          </div>
-
-          <div class="letter">
-
-            <span>
-              Para alguien especial
-            </span>
-
-            <strong>
-              Hay palabras que llegan justo
-              cuando el corazón las necesita.
-            </strong>
-
-            <small>
-              Con cariño,
-              Mi Carta Digital 💌
-            </small>
-
-          </div>
-
-        </div>
-
-        <div class="hint">
-          Toca el sobre para abrirlo ✨
-        </div>
-
-      </div>
-
-    </section>
-
-
-
-    <!-- =========================
-         REFLEXIÓN
-    ========================== -->
-
-    <section
-      class="daily section"
-      id="daily">
-
-      <div class="section-tag">
-        ✨ REFLEXIÓN DEL DÍA
-      </div>
-
-      <div class="quote-card">
-
-        <div class="quote-mark">
-          “
-        </div>
-
-        <h2>
-          Siempre sé tú,
-          sin importar los demás.
+        <h2 style="text-align:center;">
+          Crear mi cuenta
         </h2>
 
-        <p>
-          No cambies tu esencia para encajar
-          en lugares donde nunca valorarán
-          quién eres.
-
-          Tu forma de sentir, soñar y seguir
-          adelante tiene un valor único.
-
-          A veces, ser tú mismo es el acto
-          de amor propio más bonito que
-          puedes regalarte.
+        <p style="text-align:center;">
+          Comienza tu historia en Mi Carta Digital. 💗
         </p>
 
-        <span>
-          — Mi Carta Digital 🌷
-        </span>
-
-      </div>
-
-    </section>
-
-
-
-    <!-- =========================
-         CARACTERÍSTICAS
-    ========================== -->
-
-    <section class="features section">
-
-      <div class="section-tag">
-        💫 UN LUGAR PARA SENTIR
-      </div>
-
-      <h2>
-        Haz que tus palabras
-        <em>dejen huella.</em>
-      </h2>
-
-
-      <div class="grid">
-
-
-        <article>
-
-          <i>💌</i>
-
-          <h3>
-            Crear Carta
-          </h3>
-
-          <p>
-            Escribe mensajes con fondos,
-            flores, stickers, corazones
-            y una firma especial.
-          </p>
-
-        </article>
-
-
-        <article>
-
-          <i>📬</i>
-
-          <h3>
-            Mi Buzón
-          </h3>
-
-          <p>
-            Recibe y guarda tus cartas
-            en un espacio íntimo,
-            privado y bonito.
-          </p>
-
-        </article>
-
-
-        <article>
-
-          <i>🦋</i>
-
-          <h3>
-            Reflexiones
-          </h3>
-
-          <p>
-            Pequeñas palabras para
-            acompañar grandes momentos.
-          </p>
-
-        </article>
-
-
-        <article>
-
-          <i>👥</i>
-
-          <h3>
-            Comunidad
-          </h3>
-
-          <p>
-            Conecta con personas dentro
-            de una comunidad organizada.
-          </p>
-
-        </article>
-
-
-        <article>
-
-          <i>🌸</i>
-
-          <h3>
-            Decoración
-          </h3>
-
-          <p>
-            Flores, mariposas, estrellas
-            y detalles para hacer cada
-            carta única.
-          </p>
-
-        </article>
-
-
-        <article>
-
-          <i>👑</i>
-
-          <h3>
-            Membresía
-          </h3>
-
-          <p>
-            Acceso premium por
-            $20 al mes con beneficios
-            especiales.
-          </p>
-
-        </article>
-
-
-      </div>
-
-    </section>
-
-
-
-    <!-- =========================
-         MISIÓN
-    ========================== -->
-
-    <section
-      class="mission section"
-      id="mision">
-
-      <div class="split">
-
-        <div class="flower-orb">
-          🌷
-        </div>
-
-        <div>
-
-          <div class="section-tag">
-            🌷 NUESTRA MISIÓN
-          </div>
-
-          <h2>
-            Conectar corazones
-            <em>a través de las palabras.</em>
-          </h2>
-
-          <p>
-            En Mi Carta Digital creamos
-            un espacio donde cada mensaje
-            tiene un propósito:
-
-            acompañar, inspirar, escuchar
-            y regalar un momento de esperanza.
-
-            Queremos transformar simples
-            palabras en experiencias
-            significativas.
-          </p>
-
-        </div>
-
-      </div>
-
-    </section>
-
-
-
-    <!-- =========================
-         VISIÓN
-    ========================== -->
-
-    <section
-      class="vision section"
-      id="vision">
-
-      <div class="split reverse">
-
-        <div>
-
-          <div class="section-tag">
-            🌟 NUESTRA VISIÓN
-          </div>
-
-          <h2>
-            Que las palabras vuelvan
-            a tener
-            <em>un significado especial.</em>
-          </h2>
-
-          <p>
-            Soñamos con construir una
-            comunidad que llegue a personas
-            de diferentes lugares.
-
-            Una red de cartas, emociones
-            y conexiones reales.
-
-            Queremos que cada persona que
-            reciba una carta pueda sentir
-            que alguien pensó en ella.
-          </p>
-
-        </div>
-
-        <div class="vision-orb">
-          💫
-        </div>
-
-      </div>
-
-    </section>
-
-
-
-    <!-- =========================
-         REVIEWS
-    ========================== -->
-
-    <section
-      class="reviews section"
-      id="reviews">
-
-      <div class="section-tag">
-        ⭐ REVIEWS
-      </div>
-
-      <h2>
-        Historias que
-        <em>nos inspiran.</em>
-      </h2>
-
-
-      <div class="review-grid">
-
-
-        <article>
-
-          “Una carta puede parecer pequeña,
-          pero lo que provoca en el corazón
-          es enorme.”
-
-          <b>
-            — Comunidad Mi Carta Digital
-          </b>
-
-        </article>
-
-
-        <article>
-
-          “Quiero que cada persona pueda
-          sentir que sus palabras importan.”
-
-          <b>
-            — Mi Carta Digital 💌
-          </b>
-
-        </article>
-
-
-        <article>
-
-          “Aquí las palabras tienen
-          un lugar para quedarse.”
-
-          <b>
-            — Nuestra comunidad
-          </b>
-
-        </article>
-
-
-      </div>
-
-    </section>
-
-
-
-    <!-- =========================
-         MEMBRESÍA
-    ========================== -->
-
-    <section class="membership section">
-
-      <div class="membership-card">
-
-        <div>
-
-          <div class="section-tag">
-            👑 MI CARTA DIGITAL PREMIUM
-          </div>
-
-          <h2>
-            Un espacio hecho para
-            <em>conectar.</em>
-          </h2>
-
-          <p>
-            Acceso a la comunidad,
-            cartas, reflexiones,
-            grupos, diseños premium
-            y experiencias especiales.
-          </p>
-
-        </div>
-
-
-        <div class="price">
-
-          <strong>
-            $20
-          </strong>
-
-          <span>
-            / mes
-          </span>
+        <form id="registerForm" class="form">
+
+          <label>Tu nombre</label>
+
+          <input
+            id="name"
+            type="text"
+            placeholder="Escribe tu nombre"
+            autocomplete="name"
+            required
+          >
+
+          <label>Correo electrónico</label>
+
+          <input
+            id="email"
+            type="email"
+            placeholder="ejemplo@gmail.com"
+            autocomplete="email"
+            required
+          >
+
+          <label>Contraseña</label>
+
+          <input
+            id="pass"
+            type="password"
+            placeholder="Mínimo 6 caracteres"
+            minlength="6"
+            autocomplete="new-password"
+            required
+          >
 
           <button
+            type="submit"
             class="primary"
-            onclick="openModal('register')">
-            Quiero ser miembro 💗
+            id="registerButton"
+          >
+            ✨ Crear mi cuenta
           </button>
+
+        </form>
+
+        <p style="text-align:center;font-size:13px;margin-top:15px;">
+          Al registrarte recibirás un correo para confirmar tu cuenta. 💗
+        </p>
+
+        <p style="text-align:center;font-size:13px;">
+          ¿Ya tienes una cuenta?
+          <a href="#" id="goLogin">
+            Entrar
+          </a>
+        </p>
+
+      </div>
+    `;
+
+    // Mostrar modal DESPUÉS de crear el contenido
+    setTimeout(() => {
+      modal.classList.add("show");
+
+      const form = document.getElementById("registerForm");
+
+      if (form) {
+        form.addEventListener("submit", register);
+      }
+
+      const loginLink = document.getElementById("goLogin");
+
+      if (loginLink) {
+        loginLink.addEventListener("click", (event) => {
+          event.preventDefault();
+          openModal("login");
+        });
+      }
+
+    }, 50);
+
+    return;
+  }
+
+
+  // ==========================================
+  // LOGIN
+  // ==========================================
+
+  if (type === "login") {
+
+    content.innerHTML = `
+      <div class="auth-card">
+
+        <div style="text-align:center;font-size:42px;">
+          💗
+        </div>
+
+        <h2 style="text-align:center;">
+          Bienvenido de vuelta
+        </h2>
+
+        <p style="text-align:center;">
+          Entra a tu espacio de cartas.
+        </p>
+
+        <form id="loginForm" class="form">
+
+          <label>Correo electrónico</label>
+
+          <input
+            id="email"
+            type="email"
+            placeholder="ejemplo@gmail.com"
+            autocomplete="email"
+            required
+          >
+
+          <label>Contraseña</label>
+
+          <input
+            id="pass"
+            type="password"
+            placeholder="Tu contraseña"
+            autocomplete="current-password"
+            required
+          >
+
+          <button
+            type="submit"
+            class="primary"
+            id="loginButton"
+          >
+            💌 Entrar
+          </button>
+
+        </form>
+
+        <p style="text-align:center;font-size:13px;margin-top:15px;">
+          ¿No tienes cuenta?
+          <a href="#" id="goRegister">
+            Regístrate
+          </a>
+        </p>
+
+      </div>
+    `;
+
+    setTimeout(() => {
+
+      modal.classList.add("show");
+
+      const form = document.getElementById("loginForm");
+
+      if (form) {
+        form.addEventListener("submit", login);
+      }
+
+      const registerLink = document.getElementById("goRegister");
+
+      if (registerLink) {
+        registerLink.addEventListener("click", (event) => {
+          event.preventDefault();
+          openModal("register");
+        });
+      }
+
+    }, 50);
+
+    return;
+  }
+
+
+  // ==========================================
+  // PANEL ADMINISTRATIVO
+  // ==========================================
+
+  if (type === "admin") {
+
+    content.innerHTML = `
+      <div class="auth-card">
+
+        <div style="text-align:center;font-size:42px;">
+          👑
+        </div>
+
+        <h2 style="text-align:center;">
+          Panel Administrativo
+        </h2>
+
+        <p style="text-align:center;">
+          Mi Carta Digital
+        </p>
+
+        <div class="admin-list">
+
+          <div class="admin-row">
+            <span>👥 Usuarios registrados</span>
+            <b id="usersCount">...</b>
+          </div>
+
+          <div class="admin-row">
+            <span>💌 Cartas</span>
+            <b>0</b>
+          </div>
+
+          <div class="admin-row">
+            <span>⭐ Reviews</span>
+            <b>3</b>
+          </div>
+
+          <div class="admin-row">
+            <span>👑 Membresías</span>
+            <b>0</b>
+          </div>
 
         </div>
 
       </div>
+    `;
 
-    </section>
+    setTimeout(() => {
+      modal.classList.add("show");
+      loadAdminStats();
+    }, 50);
 
-
-  </main>
-
-
-
-  <!-- =========================
-       FOOTER
-  ========================== -->
-
-  <footer>
-
-    <div class="brand">
-      💌 Mi Carta Digital
-    </div>
-
-    <p>
-      Palabras que conectan corazones.
-    </p>
-
-    <a
-      class="admin-link"
-      href="dashboard.html">
-
-      👑 Panel administrativo
-
-    </a>
-
-  </footer>
+    return;
+  }
+}
 
 
+// ==========================================
+// CERRAR MODAL
+// ==========================================
 
-  <!-- =========================
-       MODAL
-  ========================== -->
+function closeModal() {
 
-  <div
-    class="modal"
-    id="modal">
+  if (!modal) return;
 
-    <div class="modal-box">
-
-      <button
-        class="close"
-        onclick="closeModal()">
-
-        ×
-
-      </button>
-
-      <div id="modalContent"></div>
-
-    </div>
-
-  </div>
+  modal.classList.remove("show");
+}
 
 
-  <!-- TOAST -->
+// ==========================================
+// CERRAR AL HACER CLICK AFUERA
+// ==========================================
 
-  <div
-    class="toast"
-    id="toast">
-  </div>
+if (modal) {
+
+  modal.addEventListener("click", function(event) {
+
+    if (event.target === modal) {
+      closeModal();
+    }
+
+  });
+
+}
 
 
+// ==========================================
+// REGISTRO REAL CON SUPABASE
+// ==========================================
 
-  <!-- =========================
-       APP.JS
-  ========================== -->
+async function register(event) {
 
-  <script src="app.js"></script>
+  event.preventDefault();
+
+  const nameInput = document.getElementById("name");
+  const emailInput = document.getElementById("email");
+  const passwordInput = document.getElementById("pass");
+  const button = document.getElementById("registerButton");
+
+  if (!nameInput || !emailInput || !passwordInput) {
+    showToast("❌ No se pudieron encontrar los campos.");
+    return;
+  }
+
+  const name = nameInput.value.trim();
+  const email = emailInput.value.trim();
+  const password = passwordInput.value;
+
+  if (!name) {
+    showToast("💗 Escribe tu nombre.");
+    nameInput.focus();
+    return;
+  }
+
+  if (!email) {
+    showToast("💗 Escribe tu correo.");
+    emailInput.focus();
+    return;
+  }
+
+  if (password.length < 6) {
+    showToast("🔐 La contraseña debe tener mínimo 6 caracteres.");
+    passwordInput.focus();
+    return;
+  }
+
+  if (!window.supabase || !supabaseClient) {
+    showToast("❌ Supabase no está conectado.");
+    return;
+  }
+
+  // Evita doble clic
+  if (button) {
+    button.disabled = true;
+    button.textContent = "💌 Creando cuenta...";
+  }
+
+  showToast("💌 Creando tu cuenta...");
+
+  try {
+
+    const { data, error } =
+      await supabaseClient.auth.signUp({
+
+        email: email,
+
+        password: password,
+
+        options: {
+          data: {
+            name: name
+          }
+        }
+
+      });
 
 
-</body>
-</html>
+    if (error) {
+
+      console.error("SUPABASE SIGNUP ERROR:", error);
+
+      if (button) {
+        button.disabled = false;
+        button.textContent = "✨ Crear mi cuenta";
+      }
+
+      showToast("❌ " + error.message);
+
+      return;
+    }
+
+
+    console.log("Usuario creado:", data);
+
+    closeModal();
+
+    showToast(
+      "💌 ¡Cuenta creada! Revisa tu correo para confirmar tu email."
+    );
+
+  } catch (error) {
+
+    console.error("ERROR:", error);
+
+    if (button) {
+      button.disabled = false;
+      button.textContent = "✨ Crear mi cuenta";
+    }
+
+    showToast(
+      "❌ Ocurrió un error. Inténtalo nuevamente."
+    );
+  }
+}
+
+
+// ==========================================
+// LOGIN REAL CON SUPABASE
+// ==========================================
+
+async function login(event) {
+
+  event.preventDefault();
+
+  const emailInput = document.getElementById("email");
+  const passwordInput = document.getElementById("pass");
+  const button = document.getElementById("loginButton");
+
+  if (!emailInput || !passwordInput) {
+    showToast("❌ No se encontraron los campos.");
+    return;
+  }
+
+  const email = emailInput.value.trim();
+  const password = passwordInput.value;
+
+  if (!email) {
+    showToast("💗 Escribe tu correo.");
+    emailInput.focus();
+    return;
+  }
+
+  if (!password) {
+    showToast("🔐 Escribe tu contraseña.");
+    passwordInput.focus();
+    return;
+  }
+
+  if (!window.supabase || !supabaseClient) {
+    showToast("❌ Supabase no está conectado.");
+    return;
+  }
+
+  if (button) {
+    button.disabled = true;
+    button.textContent = "💗 Entrando...";
+  }
+
+  showToast("💗 Iniciando sesión...");
+
+  try {
+
+    const { data, error } =
+      await supabaseClient.auth.signInWithPassword({
+
+        email: email,
+        password: password
+
+      });
+
+
+    if (error) {
+
+      console.error("LOGIN ERROR:", error);
+
+      if (button) {
+        button.disabled = false;
+        button.textContent = "💌 Entrar";
+      }
+
+      showToast("❌ " + error.message);
+
+      return;
+    }
+
+
+    const user = data.user;
+
+    const name =
+      user?.user_metadata?.name ||
+      user?.email?.split("@")[0] ||
+      "amigo/a";
+
+    closeModal();
+
+    showToast(
+      `💗 ¡Hola ${name}! Tu espacio está listo.`
+    );
+
+    setTimeout(() => {
+
+      window.location.href = "dashboard.html";
+
+    }, 1000);
+
+  } catch (error) {
+
+    console.error("LOGIN ERROR:", error);
+
+    if (button) {
+      button.disabled = false;
+      button.textContent = "💌 Entrar";
+    }
+
+    showToast(
+      "❌ No se pudo iniciar sesión."
+    );
+  }
+}
+
+
+// ==========================================
+// ESTADÍSTICAS DEL ADMIN
+// ==========================================
+
+async function loadAdminStats() {
+
+  const usersCount =
+    document.getElementById("usersCount");
+
+  if (!usersCount) return;
+
+  try {
+
+    if (!supabaseClient) {
+      usersCount.textContent = "—";
+      return;
+    }
+
+    // Por seguridad, Supabase no permite contar
+    // usuarios de Auth directamente desde el navegador.
+    // Dejamos el panel preparado.
+    usersCount.textContent = "—";
+
+  } catch (error) {
+
+    console.error(error);
+
+    usersCount.textContent = "—";
+  }
+}
+
+
+// ==========================================
+// MENSAJES
+// ==========================================
+
+function showToast(message) {
+
+  if (!toast) return;
+
+  toast.textContent = message;
+
+  toast.classList.add("show");
+
+  setTimeout(() => {
+
+    toast.classList.remove("show");
+
+  }, 4000);
+}
+
+
+// ==========================================
+// SCROLL
+// ==========================================
+
+function scrollToSection(id) {
+
+  const section = document.getElementById(id);
+
+  if (!section) return;
+
+  section.scrollIntoView({
+    behavior: "smooth"
+  });
+}
+
+
+// ==========================================
+// SOBRE
+// ==========================================
+
+function openLetter() {
+
+  showToast(
+    "💌 Hay palabras que llegan justo cuando el corazón las necesita."
+  );
+}
+
+
+// ==========================================
+// TECLA ESC
+// ==========================================
+
+window.addEventListener("keydown", function(event) {
+
+  if (event.key === "Escape") {
+    closeModal();
+  }
+
+});
