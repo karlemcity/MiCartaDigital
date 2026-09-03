@@ -465,7 +465,8 @@ async function register(event) {
       showToast("💳 Cuenta creada. Abriendo el pago de $20/mes...");
       setTimeout(() => startMembershipCheckout(), 700);
     } else {
-      showToast("💌 Cuenta creada. Confirma tu correo y luego inicia sesión para activar la membresía.");
+      showToast("💌 Cuenta creada. Confirma tu correo y pulsa Entrar para continuar al pago de $20/mes.");
+      sessionStorage.setItem("MCD_AFTER_LOGIN", "membership");
     }
 
   } catch (error) {
