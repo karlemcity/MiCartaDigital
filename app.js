@@ -321,6 +321,56 @@ if (modal) {
 
 
 // ==========================================
+// MEMBRESÍA STRIPE 💳👑
+// ==========================================
+
+async function startMembershipCheckout(){
+  try {
+    if (!window.supabase || !supabaseClient) {
+      showToast("❌ Supabase no está conectado.");
+      return;
+    }
+
+    const { data: { session } } = await supabaseClient.auth.getSession();
+
+    if (!session?.user) {
+      sessionStorage.setItem("MCD_AFTER_LOGIN", "membership");
+      openModal("login");
+      showToast("💗 Inicia sesión para activar tu membresía.");
+      return;
+    }
+
+    showToast("💳 Preparando tu checkout de $20/mes...");
+
+    const response = await fetch(
+      `${SUPABASE_URL}/functions/v1/create-checkout-session`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${session.access_token}`,
+          "apikey": SUPABASE_PUBLISHABLE_KEY
+        },
+        body: JSON.stringify({})
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok || !data.url) {
+      console.error("CHECKOUT ERROR:", data);
+      showToast("❌ No pudimos abrir el pago. Revisa la configuración de Stripe.");
+      return;
+    }
+
+    window.location.href = data.url;
+  } catch (error) {
+    console.error("CHECKOUT ERROR:", error);
+    showToast("❌ Ocurrió un error al abrir Stripe.");
+  }
+}
+
+// ==========================================
 // REGISTRO REAL CON SUPABASE
 // ==========================================
 
@@ -513,11 +563,15 @@ async function login(event) {
       `💗 ¡Hola ${name}! Tu espacio está listo.`
     );
 
-    setTimeout(() => {
-
-      window.location.href = "dashboard.html";
-
-    }, 1000);
+    setTimeout(async () => {
+      const next = sessionStorage.getItem("MCD_AFTER_LOGIN");
+      if (next === "membership") {
+        sessionStorage.removeItem("MCD_AFTER_LOGIN");
+        await startMembershipCheckout();
+      } else {
+        window.location.href = "dashboard.html";
+      }
+    }, 700);
 
   } catch (error) {
 
@@ -683,3 +737,8 @@ window.addEventListener("keydown", function(event) {
     setTimeout(()=>ripple.remove(),600);
   }));
 })();
+
+
+window.startMembershipCheckout = startMembershipCheckout;
+window.openModal = openModal;
+window.closeModal = closeModal;
