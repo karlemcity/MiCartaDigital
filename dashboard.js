@@ -1,852 +1,805 @@
- // ==========================================
-// MI CARTA DIGITAL 💌
-// DASHBOARD.JS
-// ==========================================
+ <!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mi Carta Digital — Mi espacio 💌</title>
+<link rel="stylesheet" href="dashboard.css">
+</head>
 
-let currentUser = null;
+<body>
 
+<div class="aurora"></div>
+<div id="particles"></div>
 
-// ==========================================
-// INICIAR
-// ==========================================
+<aside class="sidebar">
 
-document.addEventListener("DOMContentLoaded", async () => {
-  createParticles();
-  await checkUser();
-});
+  <a class="brand" href="index.html">
+    💌 <b>Mi Carta</b><span>Digital</span>
+  </a>
 
+  <div class="profile-mini">
+    <div class="avatar" id="miniAvatar">💗</div>
 
-// ==========================================
-// USUARIO
-// ==========================================
+    <div>
+      <b id="miniName">Mi corazón</b>
+      <small>Mi espacio</small>
+    </div>
+  </div>
 
-async function checkUser() {
-  try {
-    if (!window.supabaseClient) {
-      console.error("Supabase no conectado");
-      return;
-    }
+  <nav>
 
-    const { data, error } =
-      await supabaseClient.auth.getUser();
+    <a class="active" href="#inicio">
+      🏠 <span>Inicio</span>
+    </a>
 
-    if (error) {
-      console.error(error);
-      return;
-    }
+    <a href="#buzon">
+      📬 <span>Mi Buzón</span>
+    </a>
 
-    currentUser = data.user;
+    <a href="#crear">
+      ✍️ <span>Crear Carta</span>
+    </a>
 
-    if (!currentUser) {
-      toast("💗 Debes iniciar sesión.");
+    <a href="#reflexiones">
+      ✨ <span>Reflexiones</span>
+    </a>
 
-      setTimeout(() => {
-        window.location.href = "index.html";
-      }, 1000);
+    <a href="#grupos">
+      👥 <span>Grupos</span>
+    </a>
 
-      return;
-    }
+    <a href="#membresia">
+      👑 <span>Membresía</span>
+    </a>
 
-    loadProfile();
+    <a href="#cuenta">
+      👤 <span>Mi Perfil</span>
+    </a>
 
-  } catch (error) {
-    console.error(error);
-  }
-}
+  </nav>
 
+  <button type="button" class="logout" onclick="logout()">
+    🚪 Salir
+  </button>
 
-// ==========================================
-// PERFIL
-// ==========================================
+  <a class="admin" href="#admin" onclick="showAdmin()">
+    👑 Panel administrativo
+  </a>
 
-function loadProfile() {
-  if (!currentUser) return;
+</aside>
 
-  const metadata = currentUser.user_metadata || {};
 
-  const name =
-    metadata.name ||
-    currentUser.email?.split("@")[0] ||
-    "Corazón";
+<main class="main">
 
-  const email =
-    currentUser.email ||
-    "";
+<header class="top">
 
+  <div>
 
-  const elements = {
-    welcomeName: name,
-    miniName: name,
-    profileName: name,
-    profileEmail: email
-  };
+    <span class="eyebrow">
+      MI ESPACIO · CARTA DIGITAL
+    </span>
 
+    <h1>
+      Bienvenida,
+      <span id="welcomeName">corazón</span>
+      💗
+    </h1>
 
-  Object.keys(elements).forEach(id => {
-    const element = document.getElementById(id);
+  </div>
 
-    if (element) {
-      element.textContent = elements[id];
-    }
-  });
-}
+  <button
+    type="button"
+    class="soft"
+    onclick="toggleTheme()">
 
+    ✨ Cambiar ambiente
 
-// ==========================================
-// SALIR
-// ==========================================
+  </button>
 
-async function logout() {
-  try {
+</header>
 
-    await supabaseClient.auth.signOut();
 
-    toast("💗 Cerrando sesión...");
+<!-- =====================================
+     INICIO
+===================================== -->
 
-    setTimeout(() => {
-      window.location.href = "index.html";
-    }, 800);
+<section id="inicio" class="hero-card">
 
-  } catch (error) {
+  <div>
 
-    console.error(error);
+    <div class="badge">
+      ✨ REFLEXIÓN DE HOY
+    </div>
 
-    window.location.href = "index.html";
+    <h2>
+      Siempre sé tú,
+      <br>
+      <em>sin importar los demás.</em>
+    </h2>
 
-  }
-}
+    <p>
+      No cambies tu esencia para encajar.
+      Hay algo hermoso en seguir siendo tú,
+      incluso cuando el mundo intenta decirte
+      quién debes ser.
+    </p>
 
+    <button
+      type="button"
+      class="pink-btn"
+      onclick="goToCreate()">
 
-// ==========================================
-// CAMBIAR AMBIENTE
-// ==========================================
+      Escribir una carta 💌
 
-function toggleTheme() {
+    </button>
 
-  document.body.classList.toggle("dream-mode");
+  </div>
 
-  if (document.body.classList.contains("dream-mode")) {
-    toast("✨ Ambiente mágico activado.");
-  } else {
-    toast("🌷 Ambiente original restaurado.");
-  }
-}
+  <div class="floating-heart">
+    💗
+  </div>
 
+</section>
 
-// ==========================================
-// PREVISUALIZACIÓN DE CARTA
-// ==========================================
 
-function preview() {
+<!-- =====================================
+     BUZÓN
+===================================== -->
 
-  const recipient =
-    document.getElementById("recipient");
+<section id="buzon" class="section">
 
-  const message =
-    document.getElementById("message");
+  <div class="heading">
 
-  const title =
-    document.getElementById("previewTitle");
+    <div>
 
-  const text =
-    document.getElementById("previewText");
+      <span class="eyebrow">
+        📬 MI BUZÓN
+      </span>
 
-
-  if (!message) return;
-
-
-  if (title) {
-
-    if (recipient && recipient.value.trim()) {
-
-      title.textContent =
-        "Una carta para " +
-        recipient.value.trim();
-
-    } else {
-
-      title.textContent =
-        "Una carta para ti";
-
-    }
-
-  }
-
-
-  if (text) {
-
-    text.innerHTML =
-      message.value.trim()
-        ? formatLetter(message.value)
-        : "Tus palabras pueden iluminar un día.";
-
-  }
-
-}
-
-
-// ==========================================
-// EMOJIS 💗🌸🦋✨
-// ==========================================
-
-function addEmoji(emoji) {
-
-  const message =
-    document.getElementById("message");
-
-  if (!message) return;
-
-
-  const start =
-    message.selectionStart ?? message.value.length;
-
-  const end =
-    message.selectionEnd ?? message.value.length;
-
-
-  const before =
-    message.value.substring(0, start);
-
-  const after =
-    message.value.substring(end);
-
-
-  message.value =
-    before + emoji + after;
-
-
-  message.focus();
-
-
-  const newPosition =
-    start + emoji.length;
-
-  message.selectionStart =
-    newPosition;
-
-  message.selectionEnd =
-    newPosition;
-
-
-  preview();
-
-
-  // Animación de corazón al agregar decoración
-  createFloatingDecoration(emoji);
-}
-
-
-// ==========================================
-// FORMATO DE LA CARTA
-// ==========================================
-
-function formatLetter(text) {
-
-  return escapeHTML(text)
-    .replace(/\n/g, "<br>")
-    .replace(/💗/g, "<span class='letter-heart'>💗</span>")
-    .replace(/❤️/g, "<span class='letter-heart'>❤️</span>")
-    .replace(/💕/g, "<span class='letter-heart'>💕</span>")
-    .replace(/🌸/g, "<span class='letter-flower'>🌸</span>")
-    .replace(/🦋/g, "<span class='letter-butterfly'>🦋</span>")
-    .replace(/✨/g, "<span class='letter-sparkle'>✨</span>")
-    .replace(/🌷/g, "<span class='letter-flower'>🌷</span>");
-}
-
-
-// ==========================================
-// SEGURIDAD HTML
-// ==========================================
-
-function escapeHTML(text) {
-
-  const div =
-    document.createElement("div");
-
-  div.textContent = text;
-
-  return div.innerHTML;
-}
-
-
-// ==========================================
-// DECORACIÓN FLOTANTE
-// ==========================================
-
-function createFloatingDecoration(symbol) {
-
-  const decoration =
-    document.createElement("div");
-
-  decoration.textContent =
-    symbol;
-
-  decoration.style.position =
-    "fixed";
-
-  decoration.style.left =
-    "50%";
-
-  decoration.style.top =
-    "55%";
-
-  decoration.style.fontSize =
-    "30px";
-
-  decoration.style.zIndex =
-    "9999";
-
-  decoration.style.pointerEvents =
-    "none";
-
-  decoration.style.transition =
-    "all 1.2s ease";
-
-  document.body.appendChild(decoration);
-
-
-  setTimeout(() => {
-
-    decoration.style.transform =
-      `translate(
-        ${(Math.random() - 0.5) * 300}px,
-        -180px
-      ) scale(1.5)`;
-
-    decoration.style.opacity =
-      "0";
-
-  }, 50);
-
-
-  setTimeout(() => {
-    decoration.remove();
-  }, 1300);
-}
-
-
-// ==========================================
-// ENVIAR CARTA
-// ==========================================
-
-async function submitLetter() {
-
-  const recipient =
-    document.getElementById("recipient");
-
-  const message =
-    document.getElementById("message");
-
-
-  if (!recipient || !message) {
-    toast("❌ No se encontró el formulario.");
-    return;
-  }
-
-
-  const recipientEmail =
-    recipient.value.trim();
-
-  const letterMessage =
-    message.value.trim();
-
-
-  if (!recipientEmail) {
-
-    toast("💌 Escribe el correo del destinatario.");
-
-    recipient.focus();
-
-    return;
-  }
-
-
-  if (!letterMessage) {
-
-    toast("💗 Escribe tu mensaje.");
-
-    message.focus();
-
-    return;
-  }
-
-
-  if (!currentUser) {
-
-    toast("❌ Tu sesión no está activa.");
-
-    return;
-  }
-
-
-  toast("💌 Preparando tu carta...");
-
-
-  /*
-   * Intentamos guardar la carta.
-   * Si la tabla todavía no existe,
-   * mostramos un mensaje claro.
-   */
-
-  try {
-
-    const { data, error } =
-      await supabaseClient
-        .from("letters")
-        .insert({
-
-          sender_id: currentUser.id,
-
-          recipient_email:
-            recipientEmail,
-
-          message:
-            letterMessage,
-
-          status:
-            "pending"
-
-        })
-        .select();
-
-
-    if (error) {
-
-      console.error(
-        "Error guardando carta:",
-        error
-      );
-
-
-      toast(
-        "💌 Tu carta está lista, pero todavía falta conectar la tabla de cartas."
-      );
-
-      return;
-    }
-
-
-    recipient.value = "";
-    message.value = "";
-
-    preview();
-
-
-    toast(
-      "💌 ¡Carta enviada a revisión!"
-    );
-
-
-  } catch (error) {
-
-    console.error(error);
-
-    toast(
-      "❌ No se pudo guardar la carta."
-    );
-
-  }
-}
-
-
-// ==========================================
-// EDITAR PERFIL
-// ==========================================
-
-async function editProfile() {
-
-  if (!currentUser) {
-    toast("❌ No hay una cuenta activa.");
-    return;
-  }
-
-
-  const oldName =
-    currentUser.user_metadata?.name || "";
-
-
-  const newName =
-    prompt(
-      "💗 Escribe tu nuevo nombre:",
-      oldName
-    );
-
-
-  if (newName === null) return;
-
-
-  const name =
-    newName.trim();
-
-
-  if (!name) {
-
-    toast("❌ Escribe un nombre.");
-
-    return;
-  }
-
-
-  try {
-
-    const { data, error } =
-      await supabaseClient.auth.updateUser({
-
-        data: {
-          name: name
-        }
-
-      });
-
-
-    if (error) {
-
-      console.error(error);
-
-      toast(
-        "❌ No se pudo actualizar tu nombre."
-      );
-
-      return;
-    }
-
-
-    currentUser =
-      data.user;
-
-    loadProfile();
-
-
-    toast(
-      "✨ Perfil actualizado."
-    );
-
-
-  } catch (error) {
-
-    console.error(error);
-
-    toast(
-      "❌ Ocurrió un error."
-    );
-
-  }
-}
-
-
-// ==========================================
-// PANEL ADMIN
-// ==========================================
-
-function showAdmin() {
-
-  const admin =
-    document.getElementById("admin");
-
-  if (!admin) return;
-
-
-  admin.scrollIntoView({
-    behavior: "smooth"
-  });
-
-
-  loadAdminStats();
-}
-
-
-// ==========================================
-// ESTADÍSTICAS
-// ==========================================
-
-async function loadAdminStats() {
-
-  const users =
-    document.getElementById("users");
-
-  const pending =
-    document.getElementById("pendingLetters");
-
-  const reviews =
-    document.getElementById("reviews");
-
-  const memberships =
-    document.getElementById("memberships");
-
-
-  if (users)
-    users.textContent = "—";
-
-  if (pending)
-    pending.textContent = "—";
-
-  if (reviews)
-    reviews.textContent = "—";
-
-  if (memberships)
-    memberships.textContent = "—";
-}
-
-
-// ==========================================
-// ADMIN - CARTAS
-// ==========================================
-
-async function loadPendingLetters() {
-
-  const results =
-    document.getElementById("adminResults");
-
-
-  if (!results) return;
-
-
-  results.innerHTML = `
-
-    <div class="admin-result-card">
-
-      <h3>💌 Cartas pendientes</h3>
-
-      <p>
-        Aquí aparecerán las cartas
-        enviadas por los miembros.
-      </p>
-
-      <p>
-        🛡️ Podrás revisarlas antes
-        de aprobarlas.
-      </p>
+      <h2>
+        Tus cartas
+      </h2>
 
     </div>
 
-  `;
+    <span class="count">
+      0 nuevas
+    </span>
+
+  </div>
 
 
-  toast(
-    "💌 Sección de cartas preparada."
-  );
-}
+  <div class="cards">
+
+    <article class="letter-card unread">
+
+      <span class="card-icon">
+        💌
+      </span>
+
+      <div>
+
+        <b>
+          Tu buzón te espera
+        </b>
+
+        <p>
+          Cuando recibas una carta,
+          aparecerá aquí con una
+          animación especial.
+        </p>
+
+      </div>
+
+      <span>✨</span>
+
+    </article>
 
 
-// ==========================================
-// ADMIN - USUARIOS
-// ==========================================
+    <article class="letter-card">
 
-async function loadUsers() {
+      <span class="card-icon">
+        🌷
+      </span>
 
-  const results =
-    document.getElementById("adminResults");
+      <div>
 
+        <b>
+          Un espacio para guardar
+        </b>
 
-  if (!results) return;
+        <p>
+          Conserva tus mensajes
+          importantes y vuelve a ellos
+          cuando quieras.
+        </p>
 
+      </div>
 
-  results.innerHTML = `
+      <span>♡</span>
 
-    <div class="admin-result-card">
+    </article>
 
-      <h3>👥 Usuarios registrados</h3>
+  </div>
 
-      <p>
-        Aquí aparecerán los miembros
-        de Mi Carta Digital.
-      </p>
-
-    </div>
-
-  `;
-
-
-  toast(
-    "👥 Sección de usuarios."
-  );
-}
+</section>
 
 
-// ==========================================
-// ADMIN - REVIEWS
-// ==========================================
+<!-- =====================================
+     CREAR CARTA
+===================================== -->
 
-async function loadReviews() {
+<section id="crear" class="section">
 
-  const results =
-    document.getElementById("adminResults");
+  <div class="heading">
 
+    <div>
 
-  if (!results) return;
+      <span class="eyebrow">
+        ✍️ CREAR CARTA
+      </span>
 
-
-  results.innerHTML = `
-
-    <div class="admin-result-card">
-
-      <h3>⭐ Reviews</h3>
-
-      <p>
-        Aquí podrás administrar
-        las opiniones de la comunidad.
-      </p>
-
-    </div>
-
-  `;
-
-
-  toast(
-    "⭐ Sección de reviews."
-  );
-}
-
-
-// ==========================================
-// ADMIN - MEMBRESÍAS
-// ==========================================
-
-async function loadMemberships() {
-
-  const results =
-    document.getElementById("adminResults");
-
-
-  if (!results) return;
-
-
-  results.innerHTML = `
-
-    <div class="admin-result-card">
-
-      <h3>👑 Membresías</h3>
-
-      <p>
-        Aquí aparecerán los miembros
-        Premium.
-      </p>
+      <h2>
+        Escribe desde el corazón
+      </h2>
 
     </div>
 
-  `;
+  </div>
 
 
-  toast(
-    "👑 Sección de membresías."
-  );
-}
+  <div class="composer">
 
 
-// ==========================================
-// PARTÍCULAS
-// ==========================================
+    <!-- VISTA PREVIA -->
 
-function createParticles() {
+    <div class="preview-envelope">
 
-  const container =
-    document.getElementById("particles");
+      <div class="seal">
+        ❤
+      </div>
 
-  if (!container) return;
+      <div class="paper">
 
+        <small id="previewRecipient">
+          Para alguien especial
+        </small>
 
-  const symbols = [
-    "💗",
-    "✦",
-    "✧",
-    "🌸",
-    "🦋",
-    "♡",
-    "✨"
-  ];
+        <b id="previewTitle">
+          Una carta para ti
+        </b>
 
+        <div
+          id="previewText"
+          class="letter-preview-text">
 
-  symbols.forEach(symbol => {
+          Tus palabras pueden iluminar un día.
 
-    for (let i = 0; i < 3; i++) {
+        </div>
 
-      const item =
-        document.createElement("span");
+      </div>
 
-      item.textContent =
-        symbol;
-
-      item.style.left =
-        Math.random() * 100 + "vw";
-
-      item.style.fontSize =
-        10 + Math.random() * 18 + "px";
-
-      item.style.animationDuration =
-        12 + Math.random() * 15 + "s";
-
-      item.style.animationDelay =
-        -Math.random() * 20 + "s";
-
-      container.appendChild(item);
-    }
-
-  });
-}
+    </div>
 
 
-// ==========================================
-// MENSAJES
-// ==========================================
+    <!-- FORMULARIO -->
 
-function toast(message) {
+    <div class="form">
 
-  const element =
-    document.getElementById("toast");
+      <label>
 
-  if (!element) return;
+        Para
 
+        <input
+          id="recipient"
+          type="email"
+          placeholder="Correo del destinatario"
+        >
 
-  element.textContent =
-    message;
-
-  element.classList.add("show");
-
-
-  setTimeout(() => {
-
-    element.classList.remove("show");
-
-  }, 4000);
-}
+      </label>
 
 
-// ==========================================
-// FUNCIONES GLOBALES
-// ==========================================
+      <label>
 
-window.logout =
-  logout;
+        Tu mensaje
 
-window.toggleTheme =
-  toggleTheme;
+        <textarea
+          id="message"
+          rows="7"
+          placeholder="Escribe aquí lo que tu corazón quiere decir..."
+        ></textarea>
 
-window.preview =
-  preview;
+      </label>
 
-window.addEmoji =
-  addEmoji;
 
-window.submitLetter =
-  submitLetter;
+      <!-- DECORACIÓN -->
 
-window.editProfile =
-  editProfile;
+      <div class="decor-title">
+        ✨ Decora tu carta
+      </div>
 
-window.showAdmin =
-  showAdmin;
 
-window.loadPendingLetters =
-  loadPendingLetters;
+      <div class="decor-row">
 
-window.loadUsers =
-  loadUsers;
+        <button
+          type="button"
+          onclick="addEmoji('💗')">
+          💗
+        </button>
 
-window.loadReviews =
-  loadReviews;
+        <button
+          type="button"
+          onclick="addEmoji('❤️')">
+          ❤️
+        </button>
 
-window.loadMemberships =
-  loadMemberships;
+        <button
+          type="button"
+          onclick="addEmoji('💕')">
+          💕
+        </button>
 
-window.toast =
-  toast;
+        <button
+          type="button"
+          onclick="addEmoji('🌸')">
+          🌸
+        </button>
+
+        <button
+          type="button"
+          onclick="addEmoji('🦋')">
+          🦋
+        </button>
+
+        <button
+          type="button"
+          onclick="addEmoji('✨')">
+          ✨
+        </button>
+
+        <button
+          type="button"
+          onclick="addEmoji('🌷')">
+          🌷
+        </button>
+
+        <button
+          type="button"
+          onclick="addEmoji('💌')">
+          💌
+        </button>
+
+      </div>
+
+
+      <button
+        type="button"
+        class="pink-btn"
+        onclick="submitLetter()">
+
+        Enviar a revisión 💌
+
+      </button>
+
+
+      <small class="notice">
+
+        🛡️ Por seguridad, las cartas pasan
+        primero por revisión del administrador.
+
+      </small>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =====================================
+     REFLEXIONES
+===================================== -->
+
+<section id="reflexiones" class="section">
+
+  <div class="heading">
+
+    <div>
+
+      <span class="eyebrow">
+        ✨ REFLEXIONES
+      </span>
+
+      <h2>
+        Palabras para el alma
+      </h2>
+
+    </div>
+
+  </div>
+
+
+  <div class="reflection-grid">
+
+    <article>
+
+      <span>🌷</span>
+
+      <h3>
+        Tu valor
+      </h3>
+
+      <p>
+        No necesitas demostrarle a nadie
+        que eres suficiente. Ya lo eres.
+      </p>
+
+    </article>
+
+
+    <article>
+
+      <span>🦋</span>
+
+      <h3>
+        Nuevos comienzos
+      </h3>
+
+      <p>
+        A veces cerrar una puerta es
+        la manera más bonita de abrir otra.
+      </p>
+
+    </article>
+
+
+    <article>
+
+      <span>⭐</span>
+
+      <h3>
+        Un día a la vez
+      </h3>
+
+      <p>
+        No tienes que tener todas
+        las respuestas hoy.
+        Respira y continúa.
+      </p>
+
+    </article>
+
+  </div>
+
+</section>
+
+
+<!-- =====================================
+     GRUPOS
+===================================== -->
+
+<section id="grupos" class="section">
+
+  <div class="heading">
+
+    <div>
+
+      <span class="eyebrow">
+        👥 COMUNIDAD
+      </span>
+
+      <h2>
+        Grupos
+      </h2>
+
+    </div>
+
+  </div>
+
+
+  <div class="group-card">
+
+    <div class="group-icon">
+      💞
+    </div>
+
+    <div>
+
+      <h3>
+        Palabras de esperanza
+      </h3>
+
+      <p>
+        Personas que creen que una carta
+        puede cambiar un momento.
+      </p>
+
+      <span>
+        10 miembros · Comunidad inicial
+      </span>
+
+    </div>
+
+    <button
+      type="button"
+      class="soft"
+      onclick="viewGroup()">
+
+      Ver grupo
+
+    </button>
+
+  </div>
+
+</section>
+
+
+<!-- =====================================
+     MEMBRESÍA
+===================================== -->
+
+<section id="membresia" class="section">
+
+  <div class="membership">
+
+    <div>
+
+      <span class="eyebrow">
+        👑 MEMBRESÍA
+      </span>
+
+      <h2>
+        Carta Digital
+        <em>Premium</em>
+      </h2>
+
+      <p>
+        Tu espacio para conectar,
+        escribir y recibir momentos especiales.
+      </p>
+
+
+      <div class="benefits">
+
+        <span>💌 Cartas</span>
+        <span>✨ Diseños premium</span>
+        <span>🦋 Stickers</span>
+        <span>👥 Grupos</span>
+        <span>🌷 Reflexiones</span>
+
+      </div>
+
+    </div>
+
+
+    <div class="price">
+
+      <b>$20</b>
+
+      <small>
+        / mes
+      </small>
+
+      <button
+        type="button"
+        class="pink-btn"
+        onclick="joinMembership()">
+
+        Quiero ser miembro
+
+      </button>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =====================================
+     CUENTA
+===================================== -->
+
+<section id="cuenta" class="section">
+
+  <div class="heading">
+
+    <div>
+
+      <span class="eyebrow">
+        👤 MI PERFIL
+      </span>
+
+      <h2>
+        Tu cuenta
+      </h2>
+
+    </div>
+
+  </div>
+
+
+  <div class="account">
+
+    <div
+      class="big-avatar"
+      id="bigAvatar">
+
+      💗
+
+    </div>
+
+
+    <div>
+
+      <h3 id="profileName">
+        Mi corazón
+      </h3>
+
+      <p id="profileEmail">
+        correo@ejemplo.com
+      </p>
+
+      <span class="status">
+        ● Cuenta activa
+      </span>
+
+    </div>
+
+
+    <button
+      type="button"
+      class="soft"
+      onclick="editProfile()">
+
+      Editar perfil
+
+    </button>
+
+  </div>
+
+</section>
+
+
+<!-- =====================================
+     ADMIN
+===================================== -->
+
+<section id="admin" class="section admin-panel">
+
+  <div class="heading">
+
+    <div>
+
+      <span class="eyebrow">
+        👑 ADMINISTRACIÓN
+      </span>
+
+      <h2>
+        Panel administrativo
+      </h2>
+
+    </div>
+
+    <span class="secure">
+      🔒 Privado
+    </span>
+
+  </div>
+
+
+  <div class="stats">
+
+    <div>
+      <b id="users">—</b>
+      <span>👥 Usuarios</span>
+    </div>
+
+    <div>
+      <b id="pendingLetters">—</b>
+      <span>💌 Pendientes</span>
+    </div>
+
+    <div>
+      <b id="reviews">3</b>
+      <span>⭐ Reviews</span>
+    </div>
+
+    <div>
+      <b id="memberships">—</b>
+      <span>👑 Membresías</span>
+    </div>
+
+  </div>
+
+
+  <div class="admin-tools">
+
+    <button
+      type="button"
+      onclick="loadPendingLetters()">
+
+      <b>💌 Moderación</b>
+
+      <p>
+        Revisar y aprobar cartas.
+      </p>
+
+    </button>
+
+
+    <button
+      type="button"
+      onclick="loadReviews()">
+
+      <b>⭐ Reviews</b>
+
+      <p>
+        Administrar opiniones.
+      </p>
+
+    </button>
+
+
+    <button
+      type="button"
+      onclick="loadUsers()">
+
+      <b>👥 Usuarios</b>
+
+      <p>
+        Ver miembros registrados.
+      </p>
+
+    </button>
+
+
+    <button
+      type="button"
+      onclick="loadMemberships()">
+
+      <b>👑 Membresías</b>
+
+      <p>
+        Ver miembros Premium.
+      </p>
+
+    </button>
+
+  </div>
+
+
+  <div id="adminResults"></div>
+
+</section>
+
+
+<footer>
+
+  💌 Carta Digital ·
+  Palabras que conectan corazones ·
+
+  <a href="index.html">
+    Volver a portada
+  </a>
+
+</footer>
+
+</main>
+
+
+<div id="toast"></div>
+
+
+<!-- SUPABASE -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<!-- TU CONEXIÓN -->
+<script src="supabase-config.js"></script>
+
+<!-- DASHBOARD -->
+<script src="dashboard.js"></script>
+
+</body>
+</html>
