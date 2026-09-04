@@ -409,7 +409,10 @@ async function startMembershipCheckout() {
   try {
     const response = await fetch(`${SUPABASE_URL}/functions/v1/create-checkout-session`, {method:'POST',headers:{'Content-Type':'application/json','Authorization':`Bearer ${session.access_token}`,'apikey':SUPABASE_PUBLISHABLE_KEY},body:'{}'});
     const data = await response.json();
-    if (!response.ok || !data.url) { console.error(data); return toast('❌ No pudimos abrir Stripe.'); }
+    if (!response.ok || !data.url) {
+      console.error('CHECKOUT ERROR:', data);
+      return toast('❌ ' + (data?.error || 'No pudimos abrir Stripe.'));
+    }
     window.location.href=data.url;
   } catch(e) { console.error(e); toast('❌ Error conectando con Stripe.'); }
 }

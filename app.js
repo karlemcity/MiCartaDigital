@@ -359,7 +359,7 @@ async function startMembershipCheckout(){
 
     if (!response.ok || !data.url) {
       console.error("CHECKOUT ERROR:", data);
-      showToast("❌ No pudimos abrir el pago. Revisa la configuración de Stripe.");
+      showToast("❌ " + (data?.error || "No pudimos abrir el pago de Stripe."));
       return;
     }
 
@@ -459,6 +459,7 @@ async function register(event) {
     console.log("Usuario creado:", data);
 
     sessionStorage.setItem("MCD_PENDING_MEMBERSHIP", "1");
+    sessionStorage.setItem("MCD_FLOW", "membership-first");
     closeModal();
 
     if (data.session?.user) {
