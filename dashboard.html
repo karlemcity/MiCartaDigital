@@ -77,6 +77,8 @@
       ✍️ <span>Crear Carta</span>
     </a>
 
+    <a href="#creadorPro">🎨 <span>Creador PRO</span></a>
+
     <a href="#reflexiones">
       ✨ <span>Reflexiones</span>
     </a>
@@ -980,6 +982,42 @@
 
 </footer>
 
+
+
+<section id="creadorPro" class="section">
+  <div class="heading">
+    <div>
+      <span class="eyebrow">💌 CREADOR PRO</span>
+      <h2>Haz una carta que se sienta <em>viva.</em></h2>
+      <p>Plantillas, stickers, fondos y efectos para crear algo único.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="pro-toolbar">
+      <button class="pro-tool" onclick="applyTemplate('amor')">💗 Amor</button>
+      <button class="pro-tool" onclick="applyTemplate('animo')">🌷 Ánimo</button>
+      <button class="pro-tool" onclick="applyTemplate('amistad')">🦋 Amistad</button>
+      <button class="pro-tool" onclick="applyTemplate('cumple')">🎂 Cumpleaños</button>
+      <button class="pro-tool" onclick="applyTemplate('gracias')">💐 Gracias</button>
+      <button class="pro-tool" onclick="setLetterTheme('love')">🌸 Fondo rosa</button>
+      <button class="pro-tool" onclick="setLetterTheme('sky')">🩵 Fondo cielo</button>
+      <button class="pro-tool" onclick="setLetterTheme('sunset')">🌅 Fondo cálido</button>
+    </div>
+
+    <label>Stickers ✨</label>
+    <div class="sticker-panel" id="proStickerPanel"></div>
+
+    <div class="letter-stage" id="letterStage">
+      <div class="stage-stickers" id="stageStickers"></div>
+      <div class="live-letter">
+        <h3 id="proPreviewTitle">Para alguien especial 💌</h3>
+        <p id="proPreviewText">Escribe tu mensaje y mira cómo cobra vida aquí. ✨</p>
+      </div>
+    </div>
+    <p class="mini-note">💡 Los stickers flotan y la vista previa cambia al instante.</p>
+  </div>
+</section>
 
 </main>
 

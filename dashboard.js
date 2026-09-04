@@ -435,3 +435,77 @@ async function editProfile() {
   await loadProfile();
   toast('✅ Perfil actualizado.');
 }
+
+
+// ===== CREADOR PRO =====
+const PRO_STICKERS = [
+  "💗","💖","💘","💝","💕","💞","💓","💟","❤️","🩷","🧡","💛","💚","🩵","💙","💜",
+  "🌸","🌷","🌹","🌺","🌻","💐","🪻","🌼","🦋","🐚","🌙","⭐","✨","💫","🌟","☁️",
+  "🎀","🎁","🎂","🍓","🍒","🧸","🐻","🐰","🦄","☀️","🌈","🫶","😘","🥰","😊","💋"
+];
+const PRO_TEMPLATES = {
+  amor:{title:"Para ti, con todo mi corazón 💗", text:"Quería dejarte estas palabras para recordarte lo importante que eres para mí.\n\nGracias por existir y por hacer mis días más bonitos. ✨\n\nCon cariño, 💌"},
+  animo:{title:"Un poquito de luz para ti 🌷", text:"Si hoy el día pesa, respira. No tienes que tener todo resuelto ahora mismo.\n\nSigue paso a paso. Hay días mejores esperando por ti. 🦋\n\nCon mucho cariño. 💗"},
+  amistad:{title:"Para una amistad especial 🦋", text:"Hay personas que llegan y se convierten en parte bonita de nuestra historia.\n\nGracias por cada conversación, cada risa y cada momento. 💕"},
+  cumple:{title:"¡Feliz cumpleaños! 🎂", text:"Hoy celebramos tu vida, tus sueños y todo lo hermoso que está por venir.\n\nQue este nuevo año te regale motivos para sonreír. 🎉✨"},
+  gracias:{title:"Gracias por tanto 💐", text:"A veces un simple gracias no alcanza, pero quiero que sepas que valoro muchísimo todo lo que haces.\n\nGracias por estar. 💗"}
+};
+let proStageStickers = [];
+
+function initProCreator(){
+  const panel=document.getElementById("proStickerPanel");
+  if(!panel) return;
+  panel.innerHTML=PRO_STICKERS.map(s=>`<button class="sticker-btn" type="button" onclick="addProSticker('${s}')">${s}</button>`).join("");
+  const msg=document.getElementById("message");
+  if(msg){
+    msg.addEventListener("input", updateProPreview);
+    msg.addEventListener("keyup", updateProPreview);
+  }
+  updateProPreview();
+}
+function addProSticker(sticker){
+  proStageStickers.push(sticker);
+  if(proStageStickers.length>18) proStageStickers.shift();
+  renderProStickers();
+  toast("✨ Sticker añadido");
+}
+function renderProStickers(){
+  const box=document.getElementById("stageStickers");
+  if(!box) return;
+  box.innerHTML=proStageStickers.map((s,i)=>{
+    const left=5+(i*17)%88, top=8+(i*29)%78;
+    return `<span class="stage-sticker" style="left:${left}%;top:${top}%;animation-delay:${i*-0.18}s">${s}</span>`;
+  }).join("");
+}
+function applyTemplate(key){
+  const t=PRO_TEMPLATES[key];
+  if(!t) return;
+  const msg=document.getElementById("message");
+  if(msg) msg.value=t.text;
+  const title=document.getElementById("subject");
+  if(title) title.value=t.title;
+  updateProPreview();
+  if(typeof preview==="function") preview();
+  if(typeof saveDraft==="function") saveDraft();
+  toast("💌 Plantilla aplicada");
+}
+function setLetterTheme(theme){
+  const stage=document.getElementById("letterStage");
+  if(!stage) return;
+  stage.classList.remove("theme-love","theme-sky","theme-sunset");
+  stage.classList.add("theme-"+theme);
+  toast("🎨 Fondo cambiado");
+}
+function updateProPreview(){
+  const msg=document.getElementById("message")?.value.trim();
+  const title=document.getElementById("subject")?.value.trim() || "Para alguien especial 💌";
+  const t=document.getElementById("proPreviewText");
+  const h=document.getElementById("proPreviewTitle");
+  if(t) t.textContent=msg || "Escribe tu mensaje y mira cómo cobra vida aquí. ✨";
+  if(h) h.textContent=title;
+}
+window.addProSticker=addProSticker;
+window.applyTemplate=applyTemplate;
+window.setLetterTheme=setLetterTheme;
+window.updateProPreview=updateProPreview;
+document.addEventListener("DOMContentLoaded",initProCreator);

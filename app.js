@@ -748,3 +748,6 @@ window.addEventListener("keydown", function(event) {
 window.startMembershipCheckout = startMembershipCheckout;
 window.openModal = openModal;
 window.closeModal = closeModal;
+
+// Feedback global para el botón de membresía.
+window.__mcdMembershipBusy = false;
