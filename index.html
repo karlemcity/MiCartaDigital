@@ -23,15 +23,11 @@
     <a href="#inicio">Inicio</a>
     <a href="#mision">Misión</a>
     <a href="#vision">Visión</a>
-    <a href="#reviews">Reviews</a>
-
-    <button class="ghost" onclick="openModal('login')">
-      Entrar
-    </button>
-
-    <button class="primary" onclick="openModal('register')">
-      Registrarme ✨
-    </button>
+    <a href="#perfil">👤 Perfil</a>
+    <a href="#comprar">💳 Comprar</a>
+    <a href="#soporte">💬 Soporte</a>
+    <a href="#reflexiones">✨ Reflexiones</a>
+    <button class="ghost" onclick="logoutPublic()">🚪 Salir</button>
   </nav>
 </header>
 
@@ -321,6 +317,66 @@
 </section>
 
 
+
+<section class="season section" id="temporada">
+  <div class="season-banner">
+    <div class="season-copy">
+      <div class="section-tag">🍂 EDICIÓN DE SEPTIEMBRE</div>
+      <h2>Otoño, cartas y <em>sentimientos.</em></h2>
+      <p>Este mes convierte tus palabras en una experiencia cálida: hojas, café, scrapbook, recuerdos y cartas hechas para decir lo que a veces cuesta.</p>
+      <div class="season-chips"><span>🍁 Hojas</span><span>☕ Café</span><span>💌 Cartas</span><span>📔 Scrapbook</span><span>🧡 Recuerdos</span></div>
+    </div>
+    <div class="season-art" aria-hidden="true">🍂<span>💌</span>🍁</div>
+  </div>
+</section>
+
+<section class="studio section" id="studio">
+  <div class="section-tag">🎨 CARTA STUDIO</div>
+  <h2>Hazla tuya, <em>hasta el último detalle.</em></h2>
+  <p class="studio-lead">Explora ideas para tu carta digital: fondos, stickers, avatares, fotos, colores y estilos.</p>
+  <div class="studio-grid">
+    <article><i>🎀</i><h3>Plantillas</h3><p>Amor, desamor, cumpleaños, amistad, perdón, aniversario y más.</p><button class="glass" onclick="showToast('💌 Próximamente podrás elegir tu plantilla favorita.')">Ver estilos</button></article>
+    <article><i>📔</i><h3>Scrapbook</h3><p>Fotos, polaroids, notas, washi tape, flores, clips y recuerdos.</p><button class="glass" onclick="showToast('📔 Tu scrapbook puede contar toda una historia.')">Crear idea</button></article>
+    <article><i>✨</i><h3>Stickers</h3><p>Corazones, mariposas, flores, estrellas, lazos y stickers de temporada.</p><button class="glass" onclick="showToast('✨ Los stickers se podrán combinar en tu diseño.')">Explorar</button></article>
+    <article><i>👩🏻</i><h3>Avatar</h3><p>Elige una vibra para representar a quien envía o recibe la carta.</p><button class="glass" onclick="showToast('👩🏻 Avatares y estilos se pueden personalizar.')">Personalizar</button></article>
+    <article><i>🎵</i><h3>Ambiente</h3><p>Prepara una atmósfera romántica, nostálgica, alegre o de otoño.</p><button class="glass" onclick="showToast('🎵 Ambiente romántico seleccionado.')">Elegir</button></article>
+    <article><i>🎁</i><h3>Carta sorpresa</h3><p>Una experiencia especial para entregar una carta como regalo.</p><button class="primary" onclick="openLetter()">Abrir sorpresa</button></article>
+  </div>
+</section>
+
+<section class="reflections section" id="reflexiones">
+  <div class="reflection-header"><div><div class="section-tag">🌙 REFLEXIONES</div><h2>Una palabra puede cambiar <em>un día.</em></h2></div><button class="glass" onclick="nextReflection()">Otra reflexión ✨</button></div>
+  <div class="reflection-carousel" id="reflectionCarousel">
+    <div class="reflection-mini">🍂 <strong>Soltar</strong><p>Hay cosas que no se quedan para siempre; algunas llegan para enseñarte a crecer.</p></div>
+    <div class="reflection-mini">💗 <strong>Amor propio</strong><p>No necesitas convencer a nadie de tu valor. Tu corazón ya merece cuidado.</p></div>
+    <div class="reflection-mini">🌙 <strong>Extrañar</strong><p>Extrañar no siempre significa regresar. A veces significa agradecer lo vivido.</p></div>
+  </div>
+</section>
+
+<section class="tiktok section" id="tiktok">
+  <div class="tiktok-card">
+    <div class="section-tag">📱 TIKTOK CENTER</div>
+    <h2>Convierte sentimientos en <em>contenido.</em></h2>
+    <p>Ideas para publicar, conectar y llevar personas a Mi Carta Digital.</p>
+    <div class="content-ideas"><button onclick="copyTikTok('POV: escribí la carta que nunca me atreví a enviar 💌🍂')">POV: la carta que nunca envié</button><button onclick="copyTikTok('Si pudieras enviarle una última carta a alguien, ¿qué dirías? 💔')">¿Qué dirías en una última carta?</button><button onclick="copyTikTok('No todo lo que se siente se puede decir en voz alta… 💌')">Lo que no pude decir</button></div>
+    <small>Tip: termina cada video con “Haz tu carta digital 💌” y dirige al enlace de tu página.</small>
+  </div>
+</section>
+
+<section class="ambassadors section" id="embajadoras">
+  <div class="ambassador-card">
+    <div><div class="section-tag">👑 PROGRAMA DE EMBAJADORAS</div><h2>Comparte Mi Carta Digital y <em>crece con nosotros.</em></h2><p>Preparamos este espacio para futuras campañas de referidos, códigos promocionales y comisiones por ventas.</p></div>
+    <div class="ambassador-badge">💗<strong>Tu enlace</strong><span>Próximamente</span></div>
+  </div>
+</section>
+
+<section class="support-section section" id="soporte">
+  <div class="support-card">
+    <div class="support-avatar">💬</div>
+    <div><div class="section-tag">🟢 SOPORTE EN LÍNEA</div><h2>Soporte de <em>Mi Carta Digital.</em></h2><p>Si necesitas ayuda con tu carta, tu compra o cualquier detalle, puedes escribirnos directamente desde aquí.</p><button class="primary big" onclick="openSupport()">💬 Abrir Soporte</button></div>
+  </div>
+</section>
+
 <section class="membership section">
 
   <div class="membership-card">
@@ -357,6 +413,27 @@
 
 </section>
 
+<section class="profile-public section" id="perfil">
+  <div class="membership-card">
+    <div>
+      <div class="section-tag">👤 MI PERFIL</div>
+      <h2>Tu espacio en <em>Mi Carta Digital.</em></h2>
+      <p id="publicProfileText">Entra o regístrate para administrar tus cartas y tu información.</p>
+    </div>
+    <div class="price">
+      <strong>💗</strong>
+      <button class="primary" onclick="openModal('login')">Entrar a mi perfil</button>
+    </div>
+  </div>
+</section>
+
+<section class="purchase section" id="comprar">
+  <div class="membership-card">
+    <div><div class="section-tag">💌 CREA TU CARTA</div><h2>Tu historia merece <em>una carta especial.</em></h2><p>Elige tu estilo, envía tus ideas y coordina tu carta digital conmigo. Pago directo por ATH Móvil.</p></div>
+    <div class="price"><strong>💗</strong><span>ATH Móvil</span><button class="primary" onclick="showAthNumber()">Ver número de pago</button></div>
+  </div>
+</section>
+
 </main>
 
 
@@ -370,9 +447,6 @@
     Palabras que conectan corazones.
   </p>
 
-  <button class="admin-link" onclick="openModal('admin')">
-    Panel administrativo
-  </button>
 
 </footer>
 
@@ -392,6 +466,16 @@
 </div>
 
 
+
+<div class="chat-overlay" id="chatOverlay" aria-hidden="true">
+  <div class="chat-window">
+    <div class="chat-head"><div class="chat-person"><div class="chat-avatar">👩🏻</div><div><strong>Kamila</strong><span><b></b> En línea · Soporte</span></div></div><button onclick="closeSupport()">×</button></div>
+    <div class="chat-body" id="chatMessages"><div class="chat-system">💌 Hola, soy Kamila. Estoy aquí para ayudarte.</div></div>
+    <div class="chat-typing" id="chatTyping">Kamila está disponible para ayudarte 💗</div>
+    <form class="chat-form" id="chatForm"><input id="chatInput" maxlength="1000" placeholder="Escribe tu mensaje..." autocomplete="off" required><button type="submit">➤</button></form>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 
@@ -400,16 +484,17 @@
 
 <script>
 const SUPABASE_URL =
-  "https://jdzgzlavnbmedcfyzymt.supabase.co";
+  "https://kkrtkgejisgckiydkasi.supabase.co";
 
 const SUPABASE_KEY =
-  "sb_publishable_TzkIQj0d99Vdjvv6Eixisg_FMmQTdoX";
+  "sb_publishable_4psuA0RNe4CNeaKoDEXeQg_9gsFPeBr";
 
 const supabaseClient =
   window.supabase.createClient(
     SUPABASE_URL,
     SUPABASE_KEY
   );
+const SUPABASE_PUBLISHABLE_KEY = SUPABASE_KEY;
 </script>
 
 <!-- TU JAVASCRIPT -->

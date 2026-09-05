@@ -255,27 +255,10 @@ function openModal(type) {
         </p>
 
         <div class="admin-list">
-
-          <div class="admin-row">
-            <span>👥 Usuarios registrados</span>
-            <b id="usersCount">...</b>
-          </div>
-
-          <div class="admin-row">
-            <span>💌 Cartas</span>
-            <b>0</b>
-          </div>
-
-          <div class="admin-row">
-            <span>⭐ Reviews</span>
-            <b>3</b>
-          </div>
-
-          <div class="admin-row">
-            <span>👑 Membresías</span>
-            <b>0</b>
-          </div>
-
+          <div class="admin-row"><span>👥 Usuarios registrados</span><b id="usersCount">—</b></div>
+          <div class="admin-row"><span>💌 Cartas</span><b>—</b></div>
+          <div class="admin-row"><span>⭐ Reviews</span><b>3</b></div>
+          <div class="admin-row"><span>💬 Soporte</span><button class="primary" onclick="openSupportAdmin()">Abrir bandeja</button></div>
         </div>
 
       </div>
@@ -458,6 +441,8 @@ async function register(event) {
 
     console.log("Usuario creado:", data);
 
+    if (data.user) await ensureProfile(data.user);
+
     sessionStorage.setItem("MCD_PENDING_MEMBERSHIP", "1");
     sessionStorage.setItem("MCD_FLOW", "membership-first");
     closeModal();
@@ -557,6 +542,8 @@ async function login(event) {
 
 
     const user = data.user;
+
+    await ensureProfile(user);
 
     const name =
       user?.user_metadata?.name ||
@@ -744,6 +731,207 @@ window.addEventListener("keydown", function(event) {
   }));
 })();
 
+
+
+// ==========================================
+// SESIÓN PÚBLICA Y ANALÍTICA
+// ==========================================
+async function logoutPublic(){
+  try{ if(supabaseClient) await supabaseClient.auth.signOut(); } finally {
+    showToast('👋 Sesión cerrada.');
+    setTimeout(()=>location.reload(),300);
+  }
+}
+window.logoutPublic=logoutPublic;
+
+async function trackSiteEvent(eventType, metadata={}){
+  try{
+    if(!supabaseClient) return;
+    const {data:{user}}=await supabaseClient.auth.getUser();
+    let ip=null;
+    try{ const r=await fetch('https://api64.ipify.org?format=json',{cache:'no-store'}); if(r.ok) ip=(await r.json()).ip||null; }catch(_){}
+    await supabaseClient.from('site_events').insert({
+      event_type:eventType, user_id:user?.id||null, email:user?.email||null,
+      ip_address:ip, host:location.hostname, user_agent:navigator.userAgent,
+      referrer:document.referrer||null, metadata
+    });
+  }catch(e){ console.debug('Analytics:',e.message); }
+}
+trackSiteEvent('page_view');
+
+// ==========================================
+// CHAT REAL CON KAMILA — SUPABASE REALTIME
+// ==========================================
+let mcdConversationId = null;
+let mcdChatChannel = null;
+let mcdAdminConversationId = null;
+let mcdAdminChannel = null;
+
+async function ensureProfile(user){
+  if(!user || !supabaseClient) return;
+  const name = user.user_metadata?.name || user.email?.split('@')[0] || 'Miembro';
+  const { error } = await supabaseClient.from('profiles').upsert({
+    id:user.id, name, avatar:'💗'
+  }, { onConflict:'id' });
+  if(error) console.warn('Perfil:', error.message);
+}
+
+function openSupport(){
+  trackSiteEvent('support_open');
+  const overlay=document.getElementById('chatOverlay');
+  if(!overlay) return;
+  overlay.classList.add('show');
+  overlay.setAttribute('aria-hidden','false');
+  const input=document.getElementById('chatInput');
+  if(input) setTimeout(()=>input.focus(),150);
+  initCustomerChat();
+}
+window.openSupport=openSupport;
+
+function closeSupport(){
+  const overlay=document.getElementById('chatOverlay');
+  if(overlay){ overlay.classList.remove('show'); overlay.setAttribute('aria-hidden','true'); }
+  if(mcdChatChannel && supabaseClient){ supabaseClient.removeChannel(mcdChatChannel); mcdChatChannel=null; }
+}
+window.closeSupport=closeSupport;
+
+async function initCustomerChat(){
+  const messagesBox=document.getElementById('chatMessages');
+  if(!messagesBox || !supabaseClient) return;
+  const {data:{session}}=await supabaseClient.auth.getSession();
+  if(!session?.user){
+    messagesBox.innerHTML='<div class="chat-system">🔐 Para hablar conmigo, primero entra a tu cuenta. 💗</div><button class="primary" onclick="closeSupport();openModal(\'login\')">Entrar a mi cuenta</button>';
+    return;
+  }
+  await ensureProfile(session.user);
+  let {data:conv,error}=await supabaseClient.from('support_conversations').select('*').eq('user_id',session.user.id).order('updated_at',{ascending:false}).limit(1).maybeSingle();
+  if(error){ console.error(error); messagesBox.innerHTML='<div class="chat-system">❌ No pude conectar el chat. Inténtalo de nuevo.</div>'; return; }
+  if(!conv){
+    const created=await supabaseClient.from('support_conversations').insert({user_id:session.user.id,status:'open'}).select().single();
+    if(created.error){ console.error(created.error); messagesBox.innerHTML='<div class="chat-system">❌ No pude abrir tu conversación.</div>'; return; }
+    conv=created.data;
+  }
+  mcdConversationId=conv.id;
+  await loadCustomerMessages();
+  if(mcdChatChannel) supabaseClient.removeChannel(mcdChatChannel);
+  mcdChatChannel=supabaseClient.channel('mcd-customer-'+conv.id)
+    .on('postgres_changes',{event:'INSERT',schema:'public',table:'support_messages',filter:'conversation_id=eq.'+conv.id},payload=>renderChatMessage(payload.new,session.user.id))
+    .subscribe();
+}
+
+async function loadCustomerMessages(){
+  const box=document.getElementById('chatMessages'); if(!box||!mcdConversationId) return;
+  const {data,error}=await supabaseClient.from('support_messages').select('*').eq('conversation_id',mcdConversationId).order('created_at',{ascending:true});
+  if(error){console.error(error);return;}
+  box.innerHTML='<div class="chat-system">💌 Hola, soy Kamila. Estoy aquí para ayudarte.</div>';
+  const {data:{user}}=await supabaseClient.auth.getUser();
+  (data||[]).forEach(m=>renderChatMessage(m,user?.id));
+  box.scrollTop=box.scrollHeight;
+}
+
+function renderChatMessage(m,currentUserId){
+  const box=document.getElementById('chatMessages'); if(!box||!m) return;
+  if(box.querySelector('[data-message-id="'+m.id+'"]')) return;
+  const el=document.createElement('div');
+  el.dataset.messageId=m.id;
+  el.className='chat-bubble '+(m.sender_id===currentUserId?'mine':'them');
+  el.textContent=m.body;
+  const t=document.createElement('span'); t.className='chat-time'; t.textContent=new Date(m.created_at).toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
+  el.appendChild(t); box.appendChild(el); box.scrollTop=box.scrollHeight;
+}
+
+async function sendCustomerMessage(event){
+  event.preventDefault();
+  const input=document.getElementById('chatInput'); if(!input||!mcdConversationId) return;
+  const body=input.value.trim(); if(!body) return;
+  const {data:{user}}=await supabaseClient.auth.getUser();
+  if(!user){showToast('🔐 Entra a tu cuenta para enviar mensajes.');return;}
+  input.disabled=true;
+  const {error}=await supabaseClient.from('support_messages').insert({conversation_id:mcdConversationId,sender_id:user.id,body});
+  input.disabled=false;
+  if(error){console.error(error);showToast('❌ No se pudo enviar el mensaje.');return;}
+  input.value='';
+  await supabaseClient.from('support_conversations').update({updated_at:new Date().toISOString(),status:'open'}).eq('id',mcdConversationId).eq('user_id',user.id);
+}
+
+document.getElementById('chatForm')?.addEventListener('submit',sendCustomerMessage);
+document.getElementById('chatOverlay')?.addEventListener('click',e=>{if(e.target.id==='chatOverlay')closeSupport();});
+
+async function openSupportAdmin(){
+  if(!supabaseClient) return;
+  const {data:{user}}=await supabaseClient.auth.getUser();
+  if(!user){closeModal();openModal('login');showToast('🔐 Entra con tu cuenta de administradora.');return;}
+  const {data:profile}=await supabaseClient.from('profiles').select('role,name').eq('id',user.id).maybeSingle();
+  if(profile?.role!=='admin'){showToast('⛔ Esta bandeja es solo para administradores.');return;}
+  content.innerHTML=`<div class="auth-card"><button class="close" onclick="openModal('admin')">←</button><h2>💬 Bandeja de Kamila</h2><p>Conversaciones de clientes en tiempo real.</p><div id="adminConversations" class="admin-list">Cargando...</div><div id="adminReplyBox"></div></div>`;
+  modal.classList.add('show');
+  await loadAdminConversations();
+}
+window.openSupportAdmin=openSupportAdmin;
+
+async function loadAdminConversations(){
+  const box=document.getElementById('adminConversations'); if(!box) return;
+  const {data,error}=await supabaseClient.from('support_conversations').select('*').order('updated_at',{ascending:false});
+  if(error){box.innerHTML='<div class="admin-row">❌ '+escapeHtml(error.message)+'</div>';return;}
+  if(!data?.length){box.innerHTML='<div class="admin-row">💗 Todavía no hay conversaciones.</div>';return;}
+  box.innerHTML=data.map(c=>`<button class="admin-row" style="text-align:left;cursor:pointer" onclick="selectAdminConversation('${c.id}')"><span>💌 Cliente ${c.user_id.slice(0,8)}…<small style="display:block;color:#9b8193">${new Date(c.updated_at).toLocaleString()}</small></span><b>${c.status==='open'?'🟢':'⚪'}</b></button>`).join('');
+}
+window.loadAdminConversations=loadAdminConversations;
+
+async function selectAdminConversation(id){
+  mcdAdminConversationId=id;
+  const box=document.getElementById('adminReplyBox'); if(!box)return;
+  box.innerHTML=`<div class="chat-body" id="adminMessages" style="height:300px;margin-top:15px;border-radius:18px"></div><form class="chat-form" id="adminForm"><input id="adminInput" maxlength="1000" placeholder="Responder como Kamila..." required><button>➤</button></form>`;
+  await loadAdminMessages();
+  document.getElementById('adminForm')?.addEventListener('submit',sendAdminMessage);
+  if(mcdAdminChannel) supabaseClient.removeChannel(mcdAdminChannel);
+  mcdAdminChannel=supabaseClient.channel('mcd-admin-'+id).on('postgres_changes',{event:'INSERT',schema:'public',table:'support_messages',filter:'conversation_id=eq.'+id},async()=>loadAdminMessages()).subscribe();
+}
+window.selectAdminConversation=selectAdminConversation;
+
+async function loadAdminMessages(){
+  const box=document.getElementById('adminMessages');if(!box||!mcdAdminConversationId)return;
+  const {data,error}=await supabaseClient.from('support_messages').select('*').eq('conversation_id',mcdAdminConversationId).order('created_at',{ascending:true});
+  if(error){box.textContent=error.message;return;}
+  box.innerHTML='';
+  const {data:{user}}=await supabaseClient.auth.getUser();
+  (data||[]).forEach(m=>{const el=document.createElement('div');el.className='chat-bubble '+(m.sender_id===user?.id?'mine':'them');el.textContent=m.body;box.appendChild(el)});
+  box.scrollTop=box.scrollHeight;
+}
+
+async function sendAdminMessage(e){
+  e.preventDefault();const input=document.getElementById('adminInput');if(!input||!mcdAdminConversationId)return;
+  const body=input.value.trim();if(!body)return;
+  const {data:{user}}=await supabaseClient.auth.getUser();if(!user)return;
+  const {error}=await supabaseClient.from('support_messages').insert({conversation_id:mcdAdminConversationId,sender_id:user.id,body});
+  if(error){showToast('❌ '+error.message);return;}
+  await supabaseClient.from('support_conversations').update({updated_at:new Date().toISOString()}).eq('id',mcdAdminConversationId);
+  input.value='';await loadAdminMessages();
+}
+
+function escapeHtml(value){const d=document.createElement('div');d.textContent=value;return d.innerHTML;}
+
+const reflections=[
+  '🍂 Soltar también es una forma de quererte. No todo lo que termina es una pérdida.',
+  '💗 No tienes que perseguir un lugar donde tu corazón nunca se sintió en casa.',
+  '🌙 Hay noches en las que sanar significa simplemente descansar y volver a intentarlo mañana.',
+  '🥀 Extrañar a alguien no obliga a volver; a veces solo confirma que fue importante.',
+  '🦋 Tu nueva versión también merece celebrar todo lo que sobreviviste.',
+  '☕ A veces una carta no cambia el pasado, pero sí cambia la forma en que lo llevas.'
+];
+let reflectionIndex=0;
+function nextReflection(){reflectionIndex=(reflectionIndex+1)%reflections.length;const cards=document.querySelectorAll('.reflection-mini');cards.forEach((c,i)=>{if(i===reflectionIndex%cards.length)c.querySelector('p').textContent=reflections[reflectionIndex];});showToast('✨ Nueva reflexión para ti.');}
+window.nextReflection=nextReflection;
+function copyTikTok(text){navigator.clipboard?.writeText(text).then(()=>showToast('📋 Caption copiado para TikTok.')).catch(()=>showToast(text));}
+window.copyTikTok=copyTikTok;
+
+
+function showAthNumber(){
+  content.innerHTML=`<div class="auth-card" style="text-align:center"><div style="font-size:55px">📱💗</div><h2>ATH Móvil</h2><p>Envía tu pago al siguiente número:</p><div style="font-size:30px;font-weight:900;letter-spacing:2px;margin:20px 0">939-450-6563</div><button class="primary" onclick="copyAth()">📋 Copiar número</button><p style="font-size:12px;margin-top:14px">Después del pago, escríbeme por el chat para continuar con tu carta. 💌</p></div>`;modal.classList.add('show');
+}
+window.showAthNumber=showAthNumber;
+function copyAth(){navigator.clipboard?.writeText('9394506563').then(()=>showToast('📋 Número de ATH Móvil copiado.')).catch(()=>showToast('939-450-6563'));}
+window.copyAth=copyAth;
 
 window.startMembershipCheckout = startMembershipCheckout;
 window.openModal = openModal;
