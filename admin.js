@@ -21,7 +21,10 @@ async function boot(){
  if(!user){loginScreen();return;}
  if((user.email||'').toLowerCase()!==OWNER_EMAIL){await supabaseClient.auth.signOut();loginScreen('⛔ Esta cuenta no tiene permiso para entrar.');return;}
  const {data:profile,error}=await supabaseClient.from('profiles').select('name,role').eq('id',user.id).maybeSingle();
- if(error||profile?.role!=='admin'){await supabaseClient.auth.signOut();loginScreen('⛔ Tu cuenta no tiene el rol administrativo habilitado.');return;}
+ if(error){loginScreen('⚠️ No se pudo verificar tu perfil administrativo. Recarga la página e inténtalo de nuevo.');return;}
+ if((user.email||'').toLowerCase()===OWNER_EMAIL && profile?.role==='admin'){
+   // Owner verified by Auth email + database role.
+ } else {await supabaseClient.auth.signOut();loginScreen('⛔ Esta cuenta no tiene acceso al Panel Administrativo.');return;}
  app.innerHTML=`<div class="top"><div><div class="eyebrow">MI CARTA DIGITAL · PRIVADO</div><h1>👑 Panel administrativo</h1><p class="muted">Bienvenida, ${esc(profile.name||'Administradora')}. Solo tu cuenta puede ver esta información.</p></div><button class="btn danger" id="logout">🚪 Salir</button></div><section class="grid"><div class="card stat"><span>👥 Usuarios</span><b id="users">—</b></div><div class="card stat"><span>👀 Visitas</span><b id="visits">—</b></div><div class="card stat"><span>💳 Compras</span><b id="purchases">—</b></div><div class="card stat"><span>🚨 Seguridad</span><b id="security">—</b></div></section><section class="card summary"><h2>🔎 Centro de actividad</h2><p class="muted">Aquí puedes revisar registros, entradas, compras y señales reportadas por la página.</p><div class="chips"><span>🔐 Acceso protegido</span><span>🛡️ RLS activo</span><span>👑 Solo administradora</span></div></section><section class="layout"><div class="card"><h2>👥 Personas registradas</h2><div id="usersList" class="list">Cargando…</div></div><div class="card"><h2>🛡️ Actividad y seguridad</h2><div id="events" class="list">Cargando…</div></div></section>`;
  document.getElementById('logout').onclick=async()=>{await supabaseClient.auth.signOut();loginScreen('Sesión cerrada.');};
  await loadDashboard();
